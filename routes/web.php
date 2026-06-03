@@ -3,7 +3,7 @@
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
-    return view('layouts.panel');
+    return view('panel.masters.categories.index');
 });
 
 Route::view('auth', 'layouts.auth');
