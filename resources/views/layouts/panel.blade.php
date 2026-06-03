@@ -235,7 +235,7 @@ body{
 
             <div class="row align-items-center">
 
-                <div class="col-md-3">
+                <div class="col-md-9">
 
                     <a href="#" class="logo">
                         <i class="fa-solid fa-seedling me-2"></i>
@@ -244,9 +244,9 @@ body{
 
                 </div>
 
-                <div class="col-md-5">
+                {{--<div class="col-md-5">
 
-                    {{-- <div class="input-group">
+                    <div class="input-group">
 
                         <input type="text"
                             class="form-control"
@@ -256,11 +256,11 @@ body{
                             <i class="fa fa-search"></i>
                         </button>
 
-                    </div> --}}
+                    </div> 
 
-                </div>
+                </div>--}}
 
-                <div class="col-md-4 text-end">
+                <div class="col-md-3 text-center">
 
                     <span class="text-white me-3 small">
                         <i class="fa-solid fa-calendar-days me-1"></i>
@@ -277,7 +277,7 @@ body{
 
                         </button>
 
-                        <ul class="dropdown-menu dropdown-menu-end">
+                        <ul class="dropdown-menu dropdown-menu-start">
 
                             <li>
                                 <a class="dropdown-item" href="#">
@@ -298,7 +298,7 @@ body{
                             </li>
 
                             <li>
-                                <a class="dropdown-item text-danger" href="#">
+                                <a class="dropdown-item text-danger" href="{{ route('auth.logout') }}">
                                     <i class="fa fa-right-from-bracket me-2"></i>
                                     Logout
                                 </a>

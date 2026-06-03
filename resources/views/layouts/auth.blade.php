@@ -5,7 +5,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <title>Krishi Dawai ERP - Login</title>
+    <title>Krishi Dawai ERP - @yield('title')</title>
 
     <!-- Bootstrap -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
@@ -92,62 +92,7 @@
             Krishi Dawai ERP
         </div>
 
-        <p class="text-center small-text mb-3">
-            Sign in to manage inventory, stock & sales
-        </p>
-
-        <!-- LOGIN FORM -->
-        <form>
-
-            <div class="mb-3">
-
-                <label class="form-label">Username</label>
-
-                <div class="input-group">
-
-                    <span class="input-group-text">
-                        <i class="fa fa-user"></i>
-                    </span>
-
-                    <input type="text" class="form-control" placeholder="Enter username">
-
-                </div>
-
-            </div>
-
-            <div class="mb-3">
-
-                <label class="form-label">Password</label>
-
-                <div class="input-group">
-
-                    <span class="input-group-text">
-                        <i class="fa fa-lock"></i>
-                    </span>
-
-                    <input type="password" class="form-control" placeholder="Enter password">
-
-                </div>
-
-            </div>
-
-            <div class="d-flex justify-content-between mb-3 small-text">
-
-                <label>
-                    <input type="checkbox"> Remember me
-                </label>
-
-                <a href="#" style="color:var(--primary); text-decoration:none;">
-                    Forgot password?
-                </a>
-
-            </div>
-
-            <button type="submit" class="btn btn-primary w-100">
-                Login
-            </button>
-
-        </form>
+        @yield('content')
 
     </div>
 
