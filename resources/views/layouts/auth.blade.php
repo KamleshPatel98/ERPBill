@@ -5,7 +5,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <title>Krishi Dawai ERP - @yield('title')</title>
+    <title>{{ getSetting('app_name') }} - @yield('title')</title>
 
     <!-- Bootstrap -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
@@ -89,7 +89,7 @@
         <!-- LOGO -->
         <div class="logo">
             <i class="fa-solid fa-seedling"></i>
-            Krishi Dawai ERP
+            {{ getSetting('app_name') }}
         </div>
 
         @yield('content')

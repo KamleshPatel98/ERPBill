@@ -5,222 +5,222 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
-    <title>Krishi Dawai ERP - @yield('title')</title>
+    <title>{{ getSetting('app_name') }} - @yield('title')</title>
 
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" rel="stylesheet">
 
     <style>
         :root{
-    --primary:#2e7d32;
-    --primary-dark:#1b5e20;
-    --secondary:#8bc34a;
-    --bg:#f4f8f1;
-    --card:#ffffff;
-}
+            --primary:#2e7d32;
+            --primary-dark:#1b5e20;
+            --secondary:#8bc34a;
+            --bg:#f4f8f1;
+            --card:#ffffff;
+        }
 
-body{
-    background:var(--bg);
-    font-family:'Segoe UI',sans-serif;
-    font-size:14px;
-    color:#333;
-}
+        body{
+            background:var(--bg);
+            font-family:'Segoe UI',sans-serif;
+            font-size:14px;
+            color:#333;
+        }
 
-/* HEADER */
-.top-header{
-    background:linear-gradient(90deg,var(--primary-dark),var(--primary));
-    padding:8px 18px;
-}
+        /* HEADER */
+        .top-header{
+            background:linear-gradient(90deg,var(--primary-dark),var(--primary));
+            padding:8px 18px;
+        }
 
-.logo{
-    color:#fff;
-    font-size:20px;
-    font-weight:700;
-    text-decoration:none;
-}
+        .logo{
+            color:#fff;
+            font-size:20px;
+            font-weight:700;
+            text-decoration:none;
+        }
 
-.profile-btn{
-    background:rgba(255,255,255,.15);
-    color:#fff;
-    border:none;
-    font-size:13px;
-    padding:6px 12px;
-}
+        .profile-btn{
+            background:rgba(255,255,255,.15);
+            color:#fff;
+            border:none;
+            font-size:13px;
+            padding:6px 12px;
+        }
 
-/* MENU */
-.menu-bar{
-    background:#fff;
-    border-bottom:1px solid #d7e5d3;
-    min-height:46px;
-}
+        /* MENU */
+        .menu-bar{
+            background:#fff;
+            border-bottom:1px solid #d7e5d3;
+            min-height:46px;
+        }
 
-.menu-bar .nav-link{
-    color:#374151;
-    font-size:14px;
-    font-weight:500;
-    padding:10px 14px;
-}
+        .menu-bar .nav-link{
+            color:#374151;
+            font-size:14px;
+            font-weight:500;
+            padding:10px 14px;
+        }
 
-.menu-bar .nav-link:hover{
-    color:var(--primary);
-}
+        .menu-bar .nav-link:hover{
+            color:var(--primary);
+        }
 
-.dropdown-menu{
-    border:none;
-    border-radius:10px;
-    box-shadow:0 4px 12px rgba(0,0,0,.08);
-}
+        .dropdown-menu{
+            border:none;
+            border-radius:10px;
+            box-shadow:0 4px 12px rgba(0,0,0,.08);
+        }
 
-/* CARDS */
-.page-card,
-.table-card{
-    background:var(--card);
-    border:none;
-    border-radius:10px;
-    box-shadow:0 2px 6px rgba(0,0,0,.06);
-}
+        /* CARDS */
+        .page-card,
+        .table-card{
+            background:var(--card);
+            border:none;
+            border-radius:10px;
+            box-shadow:0 2px 6px rgba(0,0,0,.06);
+        }
 
-.page-card .card-body{
-    padding:15px;
-}
+        .page-card .card-body{
+            padding:15px;
+        }
 
-/* PAGE TITLE */
-.page-title{
-    color:var(--primary-dark);
-    font-weight:700;
-    margin-bottom:2px;
-}
+        /* PAGE TITLE */
+        .page-title{
+            color:var(--primary-dark);
+            font-weight:700;
+            margin-bottom:2px;
+        }
 
-.page-subtitle{
-    color:#6b7280;
-    font-size:13px;
-    margin:0;
-}
+        .page-subtitle{
+            color:#6b7280;
+            font-size:13px;
+            margin:0;
+        }
 
-/* FORM */
-.form-control,
-.form-select{
-    height:36px;
-    font-size:13px;
-    border-radius:8px;
-    border:1px solid #d6e4d4;
-}
+        /* FORM */
+        .form-control,
+        .form-select{
+            height:36px;
+            font-size:13px;
+            border-radius:8px;
+            border:1px solid #d6e4d4;
+        }
 
-.form-control:focus,
-.form-select:focus{
-    box-shadow:none;
-    border-color:var(--primary);
-}
+        .form-control:focus,
+        .form-select:focus{
+            box-shadow:none;
+            border-color:var(--primary);
+        }
 
-.btn{
-    font-size:13px;
-}
+        .btn{
+            font-size:13px;
+        }
 
-.btn-primary{
-    background:var(--primary);
-    border-color:var(--primary);
-}
+        .btn-primary{
+            background:var(--primary);
+            border-color:var(--primary);
+        }
 
-.btn-primary:hover{
-    background:var(--primary-dark);
-    border-color:var(--primary-dark);
-}
+        .btn-primary:hover{
+            background:var(--primary-dark);
+            border-color:var(--primary-dark);
+        }
 
-/* TABLE */
-.table{
-    font-size:13px;
-    margin-bottom:0;
-}
+        /* TABLE */
+        .table{
+            font-size:13px;
+            margin-bottom:0;
+        }
 
-.table thead th{
-    background:#edf7ed;
-    color:var(--primary-dark);
-    padding:10px 12px;
-    font-weight:600;
-    border-bottom:1px solid #d8e7d6;
-}
+        .table thead th{
+            background:#edf7ed;
+            color:var(--primary-dark);
+            padding:10px 12px;
+            font-weight:600;
+            border-bottom:1px solid #d8e7d6;
+        }
 
-.table td{
-    padding:10px 12px;
-    vertical-align:middle;
-}
+        .table td{
+            padding:10px 12px;
+            vertical-align:middle;
+        }
 
-.table-hover tbody tr:hover{
-    background:#f7fbf6;
-}
+        .table-hover tbody tr:hover{
+            background:#f7fbf6;
+        }
 
-/* PRODUCT ICON */
-.member-avatar{
-    width:34px;
-    height:34px;
-    background:#e8f5e9;
-    border-radius:50%;
-    display:flex;
-    align-items:center;
-    justify-content:center;
-    color:var(--primary);
-    font-size:13px;
-}
+        /* PRODUCT ICON */
+        .member-avatar{
+            width:34px;
+            height:34px;
+            background:#e8f5e9;
+            border-radius:50%;
+            display:flex;
+            align-items:center;
+            justify-content:center;
+            color:var(--primary);
+            font-size:13px;
+        }
 
-/* STATUS */
-.badge-active{
-    background:#dcedc8;
-    color:#33691e;
-    padding:4px 10px;
-    border-radius:15px;
-    font-size:12px;
-    font-weight:600;
-}
+        /* STATUS */
+        .badge-active{
+            background:#dcedc8;
+            color:#33691e;
+            padding:4px 10px;
+            border-radius:15px;
+            font-size:12px;
+            font-weight:600;
+        }
 
-/* ACTION BUTTONS */
-.action-btn{
-    width:30px;
-    height:30px;
-    padding:0;
-    display:inline-flex;
-    align-items:center;
-    justify-content:center;
-    font-size:12px;
-}
+        /* ACTION BUTTONS */
+        .action-btn{
+            width:30px;
+            height:30px;
+            padding:0;
+            display:inline-flex;
+            align-items:center;
+            justify-content:center;
+            font-size:12px;
+        }
 
-/* MOBILE FIX (IMPORTANT) */
-@media(max-width:768px){
+        /* MOBILE FIX (IMPORTANT) */
+        @media(max-width:768px){
 
-    .top-header{
-        padding:10px;
-    }
+            .top-header{
+                padding:10px;
+            }
 
-    .logo{
-        font-size:18px;
-    }
+            .logo{
+                font-size:18px;
+            }
 
-    .table{
-        font-size:12px;
-    }
+            .table{
+                font-size:12px;
+            }
 
-    .page-card .row > div{
-        margin-bottom:10px;
-    }
+            .page-card .row > div{
+                margin-bottom:10px;
+            }
 
-    /* FIX NAVBAR COLLAPSE UI */
-    .navbar-collapse{
-        background:#fff;
-        margin-top:10px;
-        padding:10px;
-        border-radius:10px;
-        box-shadow:0 3px 10px rgba(0,0,0,.08);
-    }
+            /* FIX NAVBAR COLLAPSE UI */
+            .navbar-collapse{
+                background:#fff;
+                margin-top:10px;
+                padding:10px;
+                border-radius:10px;
+                box-shadow:0 3px 10px rgba(0,0,0,.08);
+            }
 
-    .menu-bar .nav-link{
-        padding:12px;
-    }
+            .menu-bar .nav-link{
+                padding:12px;
+            }
 
-    .dropdown-menu{
-        border:none;
-        box-shadow:none;
-        padding-left:10px;
-    }
-}
+            .dropdown-menu{
+                border:none;
+                box-shadow:none;
+                padding-left:10px;
+            }
+        }
     </style>
 
     @stack('style')
@@ -239,7 +239,7 @@ body{
 
                     <a href="#" class="logo">
                         <i class="fa-solid fa-seedling me-2"></i>
-                        Krishi Dawai ERP
+                        {{ getSetting('app_name') }}
                     </a>
 
                 </div>

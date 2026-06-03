@@ -16,7 +16,7 @@ class SettingSeeder extends Seeder
         $data = [
             [
                 'key_name' => 'app_name',
-                'value' => 'TifinSystem',
+                'value' => 'Krishi Dawai ERP',
             ],
             [
                 'key_name' => 'app_email',
@@ -36,7 +36,7 @@ class SettingSeeder extends Seeder
             ],
             [
                 'key_name' => 'app_footer_text',
-                'value' => '© 2026 TifinSystem. All rights reserved.',
+                'value' => '© 2026 Krishi Dawai ERPerved.',
             ],
             [
                 'key_name' => 'page_limit',
