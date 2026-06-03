@@ -13,43 +13,45 @@ class CategorySeeder extends Seeder
      */
     public function run(): void
     {
-        DB::table('categories')->insert([
+        if(DB::table('categories')->count() == 0){
+            DB::table('categories')->insert([
 
-            [
-                'name' => 'Fertilizer',
-                'is_active' => 1,
-                'created_at' => now(),
-                'updated_at' => now(),
-            ],
+                [
+                    'name' => 'Fertilizer',
+                    'is_active' => 1,
+                    'created_at' => now(),
+                    'updated_at' => now(),
+                ],
 
-            [
-                'name' => 'Pesticide',
-                'is_active' => 1,
-                'created_at' => now(),
-                'updated_at' => now(),
-            ],
+                [
+                    'name' => 'Pesticide',
+                    'is_active' => 1,
+                    'created_at' => now(),
+                    'updated_at' => now(),
+                ],
 
-            [
-                'name' => 'Seeds',
-                'is_active' => 1,
-                'created_at' => now(),
-                'updated_at' => now(),
-            ],
+                [
+                    'name' => 'Seeds',
+                    'is_active' => 1,
+                    'created_at' => now(),
+                    'updated_at' => now(),
+                ],
 
-            [
-                'name' => 'Bio Products',
-                'is_active' => 0,
-                'created_at' => now(),
-                'updated_at' => now(),
-            ],
+                [
+                    'name' => 'Bio Products',
+                    'is_active' => 0,
+                    'created_at' => now(),
+                    'updated_at' => now(),
+                ],
 
-            [
-                'name' => 'Khad',
-                'is_active' => 1,
-                'created_at' => now(),
-                'updated_at' => now(),
-            ],
+                [
+                    'name' => 'Khad',
+                    'is_active' => 1,
+                    'created_at' => now(),
+                    'updated_at' => now(),
+                ],
 
-        ]);
+            ]);
+        }
     }
 }
