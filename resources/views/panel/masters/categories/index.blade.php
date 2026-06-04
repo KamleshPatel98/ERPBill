@@ -5,21 +5,15 @@
 @section('content')
     <!-- HEADER -->
     <div class="card page-card mb-3">
-
         <div class="card-body">
-
             <div class="row align-items-center">
-
                 <div class="col-md-3">
-
                     <h4 class="page-title">
                         Category Master
                     </h4>
-
                     <p class="page-subtitle">
                         Manage Fertilizer, Pesticide & Seed categories
                     </p>
-
                 </div>
                 <div class="col-md-7">
                     <form action="{{ url()->current() }}" method="GET">
@@ -56,19 +50,15 @@
                         </div>
                     </form>
                 </div>
-
                 <div class="col-md-2 text-end">
                     <!-- CREATE BUTTON -->
-                    <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#createModal">
+                    <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#createCategoryModal">
                         <i class="fa fa-plus me-1"></i>
                         Add Category
                     </button>
                 </div>
-
             </div>
-
         </div>
-
     </div>
 
     <!-- TABLE -->
@@ -96,7 +86,7 @@
                                 <td class="text-center">
                                     <button class="btn btn-sm btn-outline-success action-btn"
                                             data-bs-toggle="modal"
-                                            data-bs-target="#editModal"
+                                            data-bs-target="#editCategoryModal"
                                             onclick="editCategory({{ $trow->id }},'{{ $trow->name }}','{{ $trow->is_active }}')">
 
                                         <i class="fa fa-pen"></i>
@@ -114,27 +104,22 @@
     </div>
 
     {{-- Create Modal --}}
-    <div class="modal fade" id="createModal" tabindex="-1">
-
+    <div class="modal fade" id="createCategoryModal" tabindex="-1">
         <div class="modal-dialog">
-
             <div class="modal-content">
-
                 <div class="modal-header">
                     <h5 class="modal-title">Add Category</h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
                 </div>
-
                 <div class="modal-body">
-
                     <form action="{{ route('categories.store') }}" method="POST">
                         @csrf
 
+                        <input type="hidden" name="form_mode" value="create">
                         <div class="mb-3">
                             <label class="form-label">Category Name</label>
                             <input type="text" name="name" class="form-control" placeholder="Enter category name" value="{{ old('name') }}">
                         </div>
-
                         <div class="mb-3">
                             <label class="form-label">Is Active</label>
                             <select name="is_active" class="form-select"id="">
@@ -142,7 +127,6 @@
                                 <option value="0" @selected(old('is_active') == '0')>Inactive</option>
                             </select>
                         </div>
-
                         <div class="text-end">
                             <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
                                 Close
@@ -151,21 +135,15 @@
                                 Save
                             </button>
                         </div>
-
                     </form>
-
                 </div>
-
             </div>
-
         </div>
-
     </div>
 
     {{-- Edit Modal--}}
-    <div class="modal fade" id="editModal" tabindex="-1">
+    <div class="modal fade" id="editCategoryModal" tabindex="-1">
         <div class="modal-dialog">
-
             <div class="modal-content">
                 <div class="modal-header">
                     <h5 class="modal-title">Edit Category</h5>
@@ -177,18 +155,19 @@
                         @csrf
                         @method('PUT')
 
-                        <input type="hidden" name="id" id="edit_id">
+                        <input type="hidden" name="id" id="edit_id" value="{{ old('id') }}">
+                        <input type="hidden" name="form_mode" value="edit">
 
                         <div class="mb-3">
                             <label class="form-label">Category Name</label>
-                            <input type="text" class="form-control" name="name" id="edit_name">
+                            <input type="text" class="form-control" name="name" id="edit_name" value="{{ old('name') }}">
                         </div>
 
                         <div class="mb-3">
                             <label class="form-label">Is Active</label>
                             <select name="is_active" class="form-select" id="edit_is_active">
-                                <option value="1">Active</option>
-                                <option value="0">Inactive</option>
+                                <option value="1" @selected(old('is_active') == '1')>Active</option>
+                                <option value="0" @selected(old('is_active') == '0')>Inactive</option>
                             </select>
                         </div>
 
@@ -205,21 +184,38 @@
                 </div>
             </div>
         </div>
-
     </div>
 @endsection
 
 @push('script')
     <script>
         function editCategory(id, name, is_active) {
-            document.getElementById('edit_id').value = id;
-            document.getElementById('edit_name').value = name;
-            document.getElementById('edit_is_active').value = is_active;
+            $('#edit_id').val(id);
+            $('#edit_name').val(name);
+            $('#edit_is_active').val(is_active);
 
-            let action = "{{ route('categories.update', ':id') }}";
-            action = action.replace(':id', id);
+            const action = "{{ route('categories.update', ':id') }}"
+                .replace(':id', id);
 
-            document.getElementById('edit_category_form').action = action;
+            $('#edit_category_form').attr('action', action);
+            $('#editCategoryModal').modal('show');
         }
+
+        $(function () {
+            @if ($errors->any() && old('form_mode') === 'create')
+                $('#createCategoryModal').modal('show');
+            @endif
+
+            @if ($errors->any() && old('form_mode') === 'edit')
+                const id = "{{ old('id') }}";
+
+                $('#edit_category_form').attr(
+                    'action',
+                    "{{ route('categories.update', ':id') }}".replace(':id', id)
+                );
+
+                $('#editCategoryModal').modal('show');
+            @endif
+        });
     </script>
 @endpush
