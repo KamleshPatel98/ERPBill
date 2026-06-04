@@ -10,7 +10,7 @@
 
             <div class="row align-items-center">
 
-                <div class="col-md-6">
+                <div class="col-md-3">
 
                     <h4 class="page-title">
                         Category Master
@@ -21,15 +21,48 @@
                     </p>
 
                 </div>
+                <div class="col-md-7">
+                    <form action="{{ url()->current() }}" method="GET">
+                        <div class="row g-2 align-items-end">
+                            <div class="col-md-5">
+                                <input type="text"
+                                    name="name"
+                                    class="form-control"
+                                    value="{{ request('name') }}"
+                                    placeholder="Search category...">
+                            </div>
 
-                <div class="col-md-6 text-end">
+                            <div class="col-md-3">
+                                <select name="is_active" class="form-select">
+                                    <option value="">All</option>
+                                    <option value="1" @selected(request('is_active') == '1')>
+                                        Active
+                                    </option>
+                                    <option value="0" @selected(request('is_active') == '0')>
+                                        Inactive
+                                    </option>
+                                </select>
+                            </div>
 
+                            <div class="col-md-4">
+                                <button type="submit" class="btn btn-primary">
+                                    <i class="fa fa-search me-1"></i> Search
+                                </button>
+
+                                <a href="{{ url()->current() }}" class="btn btn-secondary">
+                                    <i class="fa fa-refresh me-1"></i> Reset
+                                </a>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+
+                <div class="col-md-2 text-end">
                     <!-- CREATE BUTTON -->
                     <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#createModal">
                         <i class="fa fa-plus me-1"></i>
                         Add Category
                     </button>
-
                 </div>
 
             </div>
