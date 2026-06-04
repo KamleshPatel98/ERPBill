@@ -22,6 +22,7 @@ class DatabaseSeeder extends Seeder
             SettingSeeder::class,
             CategorySeeder::class,
             FinancialYearSeeder::class,
+            UnitSeeder::class,
         ]);
     }
 }
