@@ -25,6 +25,7 @@ class DatabaseSeeder extends Seeder
             UnitSeeder::class,
             GstSeeder::class,
             StateSeeder::class,
+            SupplierSeeder::class,
         ]);
     }
 }
