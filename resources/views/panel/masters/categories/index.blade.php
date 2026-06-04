@@ -91,9 +91,7 @@
                                 <td>{{ $records->firstItem() + $loop->index }}</td>
                                 <td>{{ $trow->name }}</td>
                                 <td>
-                                   <span class="badge {{ $trow->is_active ? 'bg-success' : 'bg-danger' }}">
-                                        {{ $trow->is_active ? 'Active' : 'Inactive' }}
-                                    </span>
+                                   <x-is-active :isActive="$trow->is_active" />
                                 </td>
                                 <td class="text-center">
                                     <button class="btn btn-sm btn-outline-success action-btn"
