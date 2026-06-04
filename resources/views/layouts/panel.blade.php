@@ -225,9 +225,13 @@
 
     @stack('style')
 
+    <script src="{{ asset('assets/jquery.min.js') }}"></script>
+    <script src="{{ asset('assets/sweet-alert-2.min.js') }}"></script>
 </head>
 
 <body>
+    <x-alert />
+
     <!-- TOP HEADER -->
     <div class="top-header">
 

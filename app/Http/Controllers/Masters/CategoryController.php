@@ -43,7 +43,7 @@ class CategoryController extends Controller
         ]);
 
         Category::create($validated);
-        return to_route('categories.index');
+        return back()->with('success', 'Category created successfully.');
     }
 
     /**
@@ -73,7 +73,7 @@ class CategoryController extends Controller
         ]);
 
         $category->update($validated);
-        return to_route('categories.index');
+        return back()->with('success', 'Category updated successfully.');
     }
 
     /**
