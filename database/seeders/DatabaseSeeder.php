@@ -24,6 +24,7 @@ class DatabaseSeeder extends Seeder
             FinancialYearSeeder::class,
             UnitSeeder::class,
             GstSeeder::class,
+            StateSeeder::class,
         ]);
     }
 }
