@@ -4,6 +4,7 @@ use App\Http\Controllers\AuthController;
 use App\Http\Controllers\Masters\CategoryController;
 use App\Http\Controllers\Masters\FinancialYearController;
 use App\Http\Controllers\Masters\GstController;
+use App\Http\Controllers\Masters\StateController;
 use App\Http\Controllers\Masters\UnitController;
 use Illuminate\Support\Facades\Route;
 
@@ -24,5 +25,6 @@ Route::prefix('panel')->group(function(){
         Route::resource('categories', CategoryController::class);
         Route::resource('units', UnitController::class);
         Route::resource('gsts', GstController::class);
+        Route::resource('states', StateController::class);
     });
 });

@@ -367,6 +367,7 @@
                             <li><a class="dropdown-item" href="{{ route('categories.index') }}">Category</a></li>
                             <li><a class="dropdown-item" href="{{ route('units.index') }}">Unit</a></li>
                             <li><a class="dropdown-item" href="{{ route('gsts.index') }}">GST</a></li>
+                            <li><a class="dropdown-item" href="{{ route('states.index') }}">State</a></li>
                             <li><a class="dropdown-item" href="#">Supplier</a></li>
                             <li><a class="dropdown-item" href="#">Customer</a></li>
 
