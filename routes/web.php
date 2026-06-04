@@ -3,6 +3,7 @@
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\Masters\CategoryController;
 use App\Http\Controllers\Masters\FinancialYearController;
+use App\Http\Controllers\Masters\UnitController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
@@ -20,5 +21,6 @@ Route::prefix('panel')->group(function(){
         // Masters
         Route::resource('financial-years', FinancialYearController::class);
         Route::resource('categories', CategoryController::class);
+        Route::resource('units', UnitController::class);
     });
 });
