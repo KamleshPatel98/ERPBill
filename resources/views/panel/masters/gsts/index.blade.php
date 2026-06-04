@@ -36,10 +36,12 @@
 
                         <div class="col-md-4">
                             <button type="submit" class="btn btn-primary">
+                                <i class="fa fa-search"></i>
                                 Search
                             </button>
 
                             <a href="{{ url()->current() }}" class="btn btn-secondary">
+                                <i class="fa fa-refresh"></i>
                                 Reset
                             </a>
                         </div>
@@ -52,7 +54,8 @@
                 <button class="btn btn-primary"
                         data-bs-toggle="modal"
                         data-bs-target="#createGstModal">
-                    Add GST
+                        <i class="fa fa-plus me-1"></i>
+                    Add New
                 </button>
             </div>
 
