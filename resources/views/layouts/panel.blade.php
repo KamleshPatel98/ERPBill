@@ -264,7 +264,7 @@
 
                     <span class="text-white me-3 small">
                         <i class="fa-solid fa-calendar-days me-1"></i>
-                        <?php echo date('d M Y'); ?>
+                        {{ date('d M Y'); }}
                     </span>
 
                     <div class="dropdown d-inline">
@@ -340,7 +340,7 @@
                 <ul class="navbar-nav">
 
                     <li class="nav-item">
-                        <a class="nav-link" href="#">
+                        <a class="nav-link" href="{{ route('auth.dashboard') }}">
                             <i class="fa fa-gauge me-1"></i> Dashboard
                         </a>
                     </li>
@@ -360,7 +360,7 @@
 
                         <ul class="dropdown-menu">
 
-                            <li><a class="dropdown-item" href="#">Category</a></li>
+                            <li><a class="dropdown-item" href="{{ route('categories.index') }}">Category</a></li>
                             <li><a class="dropdown-item" href="#">Unit</a></li>
                             <li><a class="dropdown-item" href="#">Supplier</a></li>
                             <li><a class="dropdown-item" href="#">Customer</a></li>
