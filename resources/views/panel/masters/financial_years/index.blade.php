@@ -203,9 +203,10 @@
                             Start Date  <span class="text-danger">*</span>
                         </label>
 
-                        <input type="date"
+                        <input type="text"
                                name="start_date"
-                               class="form-control"
+                               class="form-control datepicker"
+                               autocomplete="OFF"
                                value="{{ old('start_date') }}" required>
                     </div>
 
@@ -214,9 +215,10 @@
                             End Date  <span class="text-danger">*</span>
                         </label>
 
-                        <input type="date"
+                        <input type="text"
                                name="end_date"
-                               class="form-control"
+                               class="form-control datepicker"
+                               autocomplete="OFF"
                                value="{{ old('end_date') }}" required>
                     </div>
 
@@ -317,10 +319,11 @@
                             Start Date
                         </label>
 
-                        <input type="date"
+                        <input type="text"
                                id="edit_start_date"
                                name="start_date"
-                               class="form-control"
+                               class="form-control datepicker"
+                               autocomplete="OFF"
                                value="{{ old('start_date') }}">
                     </div>
 
@@ -329,10 +332,11 @@
                             End Date
                         </label>
 
-                        <input type="date"
+                        <input type="text"
                                id="edit_end_date"
                                name="end_date"
-                               class="form-control"
+                               class="form-control datepicker"
+                               autocomplete="OFF"
                                value="{{ old('end_date') }}">
                     </div>
 
@@ -423,3 +427,5 @@
 </script>
 
 @endpush
+
+<x-datepicker />
