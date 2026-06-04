@@ -363,7 +363,7 @@
                         </a>
 
                         <ul class="dropdown-menu">
-
+                            <li><a class="dropdown-item" href="{{ route('financial-years.index') }}">Financial Year</a></li>
                             <li><a class="dropdown-item" href="{{ route('categories.index') }}">Category</a></li>
                             <li><a class="dropdown-item" href="#">Unit</a></li>
                             <li><a class="dropdown-item" href="#">Supplier</a></li>

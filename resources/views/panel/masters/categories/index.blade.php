@@ -54,7 +54,7 @@
                     <!-- CREATE BUTTON -->
                     <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#createCategoryModal">
                         <i class="fa fa-plus me-1"></i>
-                        Add Category
+                        Add New
                     </button>
                 </div>
             </div>

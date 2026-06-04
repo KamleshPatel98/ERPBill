@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\Masters\CategoryController;
+use App\Http\Controllers\Masters\FinancialYearController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
@@ -17,6 +18,7 @@ Route::prefix('panel')->group(function(){
         Route::get('logout', [AuthController::class, 'logout'])->name('auth.logout');
 
         // Masters
+        Route::resource('financial-years', FinancialYearController::class);
         Route::resource('categories', CategoryController::class);
     });
 });
