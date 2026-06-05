@@ -19,6 +19,8 @@ class DatabaseSeeder extends Seeder
 
         $this->call([
             UserSeeder::class,
+
+            // Masters
             SettingSeeder::class,
             CategorySeeder::class,
             FinancialYearSeeder::class,
@@ -26,6 +28,7 @@ class DatabaseSeeder extends Seeder
             GstSeeder::class,
             StateSeeder::class,
             SupplierSeeder::class,
+            CustomerSeeder::class,
         ]);
     }
 }
