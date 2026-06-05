@@ -298,6 +298,13 @@
                             </li>
 
                             <li>
+                                <a class="dropdown-item" href="{{ route('settings.web.data') }}">
+                                    <i class="fa fa-cog me-2"></i>
+                                    Web Data
+                                </a>
+                            </li>
+
+                            <li>
                                 <hr class="dropdown-divider">
                             </li>
 
