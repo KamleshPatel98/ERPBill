@@ -14,8 +14,9 @@ class SupplierController extends Controller
      */
     public function index(Request $request)
     {
-        $records = Supplier::when($request->name !== null, function($q) use ($request) {
-                $q->where('name', 'like', '%' . $request->name . '%');
+        $records = Supplier::when($request->search !== null, function($q) use ($request) {
+                $q->where('name', 'like', '%' . $request->search . '%')
+                    ->orWhere('mobile', 'like', '%' . $request->search . '%');
             })
             ->when($request->is_active !== null, function ($q) use ($request) {
                 $q->where('is_active', $request->is_active);

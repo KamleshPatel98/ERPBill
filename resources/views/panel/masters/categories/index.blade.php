@@ -76,10 +76,10 @@
                         </tr>
                     </thead>
                     <tbody>
-                        @foreach ($records as $trow)
+                        @foreach ($records as $row)
                             <tr>
                                 <td>{{ $records->firstItem() + $loop->index }}</td>
-                                <td>{{ $trow->name }}</td>
+                                <td>{{ $row->name }}</td>
                                 <td>
                                    <x-is-active :isActive="$row->is_active" />
                                 </td>
@@ -87,7 +87,7 @@
                                     <button class="btn btn-sm btn-outline-success action-btn"
                                             data-bs-toggle="modal"
                                             data-bs-target="#editCategoryModal"
-                                            onclick="editCategory({{ $trow->id }},'{{ $trow->name }}','{{ $trow->is_active }}')">
+                                            onclick="editCategory({{ $row->id }},'{{ $row->name }}','{{ $row->is_active }}')">
 
                                         <i class="fa fa-pen"></i>
                                     </button>
