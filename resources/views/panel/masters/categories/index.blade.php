@@ -81,7 +81,7 @@
                                 <td>{{ $records->firstItem() + $loop->index }}</td>
                                 <td>{{ $trow->name }}</td>
                                 <td>
-                                   <x-is-active :isActive="$trow->is_active" />
+                                   <x-is-active :isActive="$row->is_active" />
                                 </td>
                                 <td class="text-center">
                                     <button class="btn btn-sm btn-outline-success action-btn"

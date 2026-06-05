@@ -20,7 +20,7 @@ return new class extends Migration
             $table->string('address');
             $table->string('city')->nullable();
             $table->foreignId('state_id')->nullable()->constrained()->nullOnDelete();
-            $table->string('zip')->nullable();
+            $table->char('zip', 6)->nullable();
             $table->boolean('is_active')->default(true)->comment('1: Active, 0: Inactive');
             $table->timestamps();
         });

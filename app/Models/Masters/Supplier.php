@@ -14,7 +14,7 @@ class Supplier extends Model
         'address',
         'city',
         'state_id',
-        'pin_code',
+        'zip',
         'is_active'
     ];
 
