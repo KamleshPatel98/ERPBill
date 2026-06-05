@@ -19,12 +19,12 @@ class SettingController extends Controller
         $validated = $request->validate([
             'app_name'          => 'required|string|max:255',
             'app_email'         => 'required|email|max:255',
-            'app_phone'         => 'required|string|max:15',
-            'app_alt_phone'     => 'nullable|string|max:15',
+            'app_phone'         => 'required|numeric|digits:10',
+            'app_alt_phone'     => 'nullable|numeric|digits:10',
             'app_address'       => 'required|string|max:500',
             'app_footer_text'   => 'nullable|string|max:500',
             'page_limit'        => 'required|integer|min:1|max:250',
-            'app_url'           => 'required|url|max:255',
+            'app_url'           => 'required|string|max:255',
         ]);
 
         $settingsData = [
