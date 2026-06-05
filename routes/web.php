@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\Masters\CategoryController;
+use App\Http\Controllers\Masters\CustomerController;
 use App\Http\Controllers\Masters\FinancialYearController;
 use App\Http\Controllers\Masters\GstController;
 use App\Http\Controllers\Masters\StateController;
@@ -28,5 +29,6 @@ Route::prefix('panel')->group(function(){
         Route::resource('gsts', GstController::class);
         Route::resource('states', StateController::class);
         Route::resource('suppliers', SupplierController::class);
+        Route::resource('customers', CustomerController::class);
     });
 });
