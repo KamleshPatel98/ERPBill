@@ -2,6 +2,8 @@
 
 namespace App\Models;
 
+use App\Models\Masters\FinancialYear;
+use App\Models\Masters\PaymentMode;
 use App\Models\Masters\Supplier;
 use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Model;
@@ -44,11 +46,11 @@ class Purchase extends Model
 
     public function financialYear()
     {
-        return $this->belongsTo('FinancialYear');
+        return $this->belongsTo(FinancialYear::class);
     }
 
     public function paymentMode()
     {
-        return $this->belongsTo('PaymentMode');
+        return $this->belongsTo(PaymentMode::class);
     }
 }

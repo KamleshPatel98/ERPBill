@@ -10,6 +10,7 @@ use App\Http\Controllers\Masters\SupplierController;
 use App\Http\Controllers\Masters\UnitController;
 use App\Http\Controllers\Masters\PaymentModeController;
 use App\Http\Controllers\ProductController;
+use App\Http\Controllers\PurchaseController;
 use App\Http\Controllers\SettingController;
 use App\Models\Product;
 use Illuminate\Support\Facades\Route;
@@ -38,6 +39,9 @@ Route::prefix('panel')->group(function(){
 
         // Product
         Route::resource('products', ProductController::class);
+
+        // Purchase
+        Route::resource('purchases', PurchaseController::class);
 
         // Setting
         Route::get('web-data', [SettingController::class, 'webData'])->name('settings.web.data');

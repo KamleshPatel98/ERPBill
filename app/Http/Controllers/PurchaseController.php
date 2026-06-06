@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Masters\Supplier;
 use App\Models\Purchase;
 use Illuminate\Http\Request;
 
@@ -10,9 +11,27 @@ class PurchaseController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
-        //
+        $records = Purchase::with([
+            'supplier:id,name',
+            'paymentMode:id,name',
+            'financialYear:id,name',
+        ])
+        ->when($request->supplier_id !== null, function($q) use ($request){
+            $q->where('supplier_id', $request->supplier_id);
+        })
+        ->when($request->invoice_no !== null, function($q) use ($request){
+            $q->where('invoice_no', $request->invoice_no);
+        })
+        ->when($request->payment_status !== null, function($q) use ($request){
+            $q->where('payment_status', $request->payment_status);
+        })
+        ->latest()
+        ->paginate(getSetting('page_limit'))
+        ->withQueryString();
+        $suppliers = Supplier::select('name', 'id', 'mobile')->get();
+        return view('panel.purchases.index', compact('records', 'suppliers'));
     }
 
     /**
@@ -60,6 +79,7 @@ class PurchaseController extends Controller
      */
     public function destroy(Purchase $purchase)
     {
-        //
+        $purchase->delete();
+        return back()->with('success', 'Purchase deleted successfully');
     }
 }
