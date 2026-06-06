@@ -15,9 +15,9 @@ return new class extends Migration
             $table->id();
             $table->string('invoice_no')->unique();
             $table->date('invoice_date');
-            $table->foreignId('supplier_id')->constrained()->nullOnDelete();
-            $table->foreignId('financial_year_id')->constrained()->nullOnDelete();
-            $table->foreignId('payment_mode_id')->constrained()->nullOnDelete();
+            $table->foreignId('supplier_id')->nullable()->constrained()->nullOnDelete();
+            $table->foreignId('financial_year_id')->constrained()->restrictOnDelete();
+            $table->foreignId('payment_mode_id')->nullable()->constrained()->nullOnDelete();
             $table->enum('payment_status', ['pending', 'paid', 'partially'])->default('pending');
 
             $table->decimal('grand_amount', 15, 2)->default(0);

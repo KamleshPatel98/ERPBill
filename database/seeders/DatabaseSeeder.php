@@ -26,9 +26,13 @@ class DatabaseSeeder extends Seeder
             FinancialYearSeeder::class,
             UnitSeeder::class,
             GstSeeder::class,
+            PaymentModeSeeder::class,
             StateSeeder::class,
             SupplierSeeder::class,
             CustomerSeeder::class,
+
+            // Products
+            ProductSeeder::class,
         ]);
     }
 }
