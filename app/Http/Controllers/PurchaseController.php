@@ -2,7 +2,10 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Masters\FinancialYear;
+use App\Models\Masters\PaymentMode;
 use App\Models\Masters\Supplier;
+use App\Models\Product;
 use App\Models\Purchase;
 use Illuminate\Http\Request;
 
@@ -39,7 +42,12 @@ class PurchaseController extends Controller
      */
     public function create()
     {
-        //
+        $suppliers = Supplier::select('name', 'id', 'mobile')->where('is_active', 1)->get();
+        $paymentModes = PaymentMode::select('name', 'id')->where('is_active', 1)->get();
+        $financialYears = FinancialYear::select('name', 'id')->where('is_active', 1)->get();
+        $products = Product::with(['category:id,name', 'unit:id,name', 'gst:id,name'])
+            ->select('name', 'id')->where('is_active', 1)->get();
+        return view('panel.purchases.create', compact('suppliers', 'paymentModes', 'financialYears', 'products'));
     }
 
     /**

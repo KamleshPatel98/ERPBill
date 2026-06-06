@@ -38,3 +38,13 @@ if (!function_exists("deleteFile")) {
         }
     }
 }
+
+if (!function_exists('generateNo')) {
+    function generateNo($model, $prefix)
+    {
+        $className = "App\\Models\\{$model}";
+        $lastRecord = $className::latest('id')->first();
+        $nextNumber = $lastRecord ? ($lastRecord->id + 1) : 1;
+        return $prefix . '-' . str_pad($nextNumber, 3, '0', STR_PAD_LEFT);
+    }
+}
