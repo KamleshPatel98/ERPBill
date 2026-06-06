@@ -6,6 +6,7 @@ use App\Models\Masters\Category;
 use App\Models\Masters\Gst;
 use App\Models\Masters\Unit;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\Storage;
 
 class Product extends Model
 {
@@ -22,6 +23,13 @@ class Product extends Model
         'opening_stock',
         'is_active',
     ];
+
+    public function getImageUrlAttribute()
+    {
+        return (!empty($this->image) && Storage::exists('products/' . $this->image))
+            ? asset('storage/products/' . $this->image)
+            : null;
+    }
 
     public function category()
     {

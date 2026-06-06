@@ -18,7 +18,7 @@ return new class extends Migration
             $table->string('hsn_code', 10)->nullable();
             $table->foreignId('unit_id')->constrained()->onDelete('cascade');
             $table->foreignId('gst_id')->constrained()->onDelete('cascade');
-            $table->decimal('mrp', 15, 2)->default(0);
+            $table->decimal('mrp', 15, 2)->default(0); // mrp >= price
             $table->decimal('price', 15, 2)->default(0);
             $table->string('image')->nullable();
             $table->text('description')->nullable();

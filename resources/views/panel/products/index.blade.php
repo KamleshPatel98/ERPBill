@@ -68,10 +68,10 @@
                 </div>
 
                 <div class="col-md-1">
-                    <button class="btn btn-primary">
+                    <a href="{{ route('products.create') }}" class="btn btn-primary">
                         <i class="fa fa-plus me-1"></i>
                         Add New
-                    </button>
+                    </a>
                 </div>
             </div>
 
@@ -118,20 +118,36 @@
 
                                 {{-- ACTION --}}
                                 <td class="text-center">
+                                    <div class="d-flex justify-content-center align-items-center gap-1">
 
-                                    <button class="btn btn-sm btn-outline-primary action-btn"
-                                        type="button"
-                                        data-bs-toggle="collapse"
-                                        data-bs-target="#collapse{{ $row->id }}"
-                                        aria-expanded="false">
+                                        <button class="btn btn-sm btn-outline-primary action-btn"
+                                            type="button"
+                                            data-bs-toggle="collapse"
+                                            data-bs-target="#collapse{{ $row->id }}">
+                                            <i class="fa fa-eye"></i>
+                                        </button>
 
-                                        <i class="fa fa-eye"></i>
+                                        <a href="{{ route('products.edit', $row) }}"
+                                            class="btn btn-sm btn-outline-success action-btn"
+                                            title="Edit">
+                                            <i class="fa fa-edit"></i>
+                                        </a>
 
-                                    </button>
+                                        <form action="{{ route('products.destroy', $row) }}"
+                                            method="POST"
+                                            class="d-inline">
+                                            @csrf
+                                            @method('DELETE')
 
-                                    <a href="{{ route('products.edit', $row) }}" class="btn btn-sm btn-outline-success action-btn" title="Edit">
-                                        <i class="fa fa-edit"></i>
-                                    </a>
+                                            <button class="btn btn-sm btn-outline-danger action-btn"
+                                                type="submit"
+                                                title="Delete"
+                                                onclick="return confirm('Are you sure you want to delete this product?');">
+                                                <i class="fa fa-trash"></i>
+                                            </button>
+                                        </form>
+
+                                    </div>
                                 </td>
                             </tr>
 
