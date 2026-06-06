@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Masters\Category;
 use App\Models\Product;
 use Illuminate\Http\Request;
 
@@ -10,9 +11,23 @@ class ProductController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
-        //
+        $records = Product::with(['category:id,name', 'unit:id,name', 'gst:id,name'])
+            ->when($request->name !== null, function($q) use ($request){
+                $q->where('name', 'like', '%' . $request->name . '%');
+            })
+            ->when($request->category_id !== null, function($q) use ($request){
+                $q->where('category_id', $request->category_id);
+            })
+            ->when($request->is_active !== null, function($q) use ($request){
+                $q->where('is_active', $request->is_active);
+            })
+            ->latest()
+            ->paginate(getSetting('page_limit'))
+            ->withQueryString();
+        $categories = Category::pluck('name', 'id');
+        return view('panel.products.index', compact('records', 'categories'));
     }
 
     /**

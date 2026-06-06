@@ -385,7 +385,7 @@
 
                     <!-- PRODUCTS -->
                     <li class="nav-item">
-                        <a class="nav-link" href="#">
+                        <a class="nav-link active" href="{{ route('products.index') }}">
                             <i class="fa-solid fa-seedling me-1"></i> Products
                         </a>
                     </li>

@@ -10,7 +10,7 @@
 
             <div class="row align-items-center">
 
-                <div class="col-lg-4">
+                <div class="col-lg-3">
 
                     <h4 class="page-title">
                         Product Inventory
@@ -23,41 +23,56 @@
                 </div>
 
                 <div class="col-lg-8">
+                    <form action="{{ url()->current() }}" method="GET">
+                        <div class="row g-2">
 
-                    <div class="row g-2">
+                            <div class="col-md-4">
+                                <input type="text"
+                                    class="form-control"
+                                    name="name"
+                                    value="{{ request('name') }}"
+                                    placeholder="Search Product">
+                            </div>
 
-                        <div class="col-md-4">
-                            <input type="text"
-                                class="form-control"
-                                placeholder="Search Product">
+                            <div class="col-md-3">
+                                <select name="category_id" class="form-select select-dropdown">
+                                    <option value="">All Categories</option>
+                                    @foreach ($categories as $id => $name)
+                                        <option value="{{ $id }}" @selected(request('category_id') == $id)>{{ $name }}</option>
+                                    @endforeach 
+                                </select>
+                            </div>
+
+                            <div class="col-md-2">
+                                <select name="is_active" class="form-select">
+                                    <option value="">All</option>
+                                    <option value="1" @selected(request('is_active') == '1')>Active</option>
+                                    <option value="0" @selected(request('is_active') == '0')>Inactive</option>
+                                </select>
+                            </div>
+
+                            <div class="col-md-3">
+                                <button class="btn btn-primary">
+                                    <i class="fa fa-search me-1"></i>
+                                    Search
+                                </button>
+
+                                <a href="{{ url()->current() }}" class="btn btn-secondary">
+                                    <i class="fa fa-search me-1"></i>
+                                    Reset
+                                </a>
+                            </div>
+
                         </div>
-
-                        <div class="col-md-3">
-                            <select class="form-select">
-                                <option>All Categories</option>
-                                <option>Fertilizer</option>
-                                <option>Pesticide</option>
-                                <option>Seeds</option>
-                            </select>
-                        </div>
-
-                        <div class="col-md-2">
-                            <button class="btn btn-primary w-100">
-                                Search
-                            </button>
-                        </div>
-
-                        <div class="col-md-3 text-end">
-                            <button class="btn btn-primary">
-                                <i class="fa fa-plus me-1"></i>
-                                Add Product
-                            </button>
-                        </div>
-
-                    </div>
-
+                    </form>
                 </div>
 
+                <div class="col-md-1">
+                    <button class="btn btn-primary">
+                        <i class="fa fa-plus me-1"></i>
+                        Add New
+                    </button>
+                </div>
             </div>
 
         </div>
@@ -69,209 +84,87 @@
 
         <div class="card-body p-0">
 
-            <table class="table table-hover align-middle">
+            <div class="table-responsive">
+                <table class="table table-hover align-middle">
 
-                <thead>
+                    <thead>
+                        <tr>
+                            <th>#</th>
+                            <th>Product</th>
+                            <th>Category</th>
+                            <th>GST</th>
+                            <th>Stock</th>
+                            <th>Price</th>
+                            <th>Status</th>
+                            <th class="text-center">Action</th>
+                        </tr>
+                    </thead>
 
-                    <tr>
-                        <th>#</th>
-                        <th>Product</th>
-                        <th>Category</th>
-                        <th>Company</th>
-                        <th>Stock</th>
-                        <th>MRP</th>
-                        <th>Status</th>
-                        <th class="text-center">Action</th>
-                    </tr>
+                    <tbody>
 
-                </thead>
+                        @foreach ($records as $index => $row)
 
-                <tbody>
+                            {{-- MAIN ROW --}}
+                            <tr>
+                                <td>{{ $index + 1 }}</td>
+                                <td>{{ $row->name }}</td>
+                                <td>{{ $row->category?->name ?? '-' }}</td>
+                                <td>{{ $row->gst?->rate ?? 0 }}%</td>
+                                <td>{{ $row->opening_stock }}</td>
+                                <td>₹{{ $row->price }}</td>
+                                <td>
+                                    <x-is-active :isActive="$row->is_active" />
+                                </td>
 
-                    <tr>
+                                {{-- ACTION --}}
+                                <td class="text-center">
 
-                        <td>1</td>
+                                    <button class="btn btn-sm btn-outline-primary action-btn"
+                                        type="button"
+                                        data-bs-toggle="collapse"
+                                        data-bs-target="#collapse{{ $row->id }}"
+                                        aria-expanded="false">
 
-                        <td>
+                                        <i class="fa fa-eye"></i>
 
-                            <div class="d-flex align-items-center">
+                                    </button>
 
-                                <div class="member-avatar me-2">
-                                    <i class="fa-solid fa-seedling"></i>
-                                </div>
+                                    <a href="{{ route('products.edit', $row) }}" class="btn btn-sm btn-outline-success action-btn" title="Edit">
+                                        <i class="fa fa-edit"></i>
+                                    </a>
+                                </td>
+                            </tr>
 
-                                <div>
+                            {{-- DETAIL ROW --}}
+                            <tr>
+                                <td colspan="8" class="p-0 border-0">
+                                    <div class="collapse" id="collapse{{ $row->id }}">
+                                        <div class="p-3 bg-light">
+                                            <div class="row">
+                                                <div class="col-md-3">
+                                                    <strong>HSN:</strong> {{ $row->hsn_code ?? '-' }}
+                                                </div>
 
-                                    <div class="fw-semibold">
-                                        Urea Fertilizer
+                                                <div class="col-md-3">
+                                                    <strong>MRP:</strong> ₹{{ $row->mrp }}
+                                                </div>
+
+                                                <div class="col-md-6">
+                                                    <strong>Description:</strong> {{ $row->description ?? '-' }}
+                                                </div>
+                                            </div>
+                                        </div>
                                     </div>
+                                </td>
+                            </tr>
 
-                                    <small class="text-muted">
-                                        50 KG Bag
-                                    </small>
+                        @endforeach
 
-                                </div>
+                    </tbody>
 
-                            </div>
-
-                        </td>
-
-                        <td>Fertilizer</td>
-
-                        <td>IFFCO</td>
-
-                        <td>120</td>
-
-                        <td>₹266</td>
-
-                        <td>
-                            <span class="badge-active">
-                                Available
-                            </span>
-                        </td>
-
-                        <td class="text-center">
-
-                            <button class="btn btn-outline-primary action-btn">
-                                <i class="fa fa-eye"></i>
-                            </button>
-
-                            <button class="btn btn-outline-success action-btn">
-                                <i class="fa fa-pen"></i>
-                            </button>
-
-                            <button class="btn btn-outline-danger action-btn">
-                                <i class="fa fa-trash"></i>
-                            </button>
-
-                        </td>
-
-                    </tr>
-
-                    <tr>
-
-                        <td>2</td>
-
-                        <td>
-
-                            <div class="d-flex align-items-center">
-
-                                <div class="member-avatar me-2">
-                                    <i class="fa-solid fa-bug"></i>
-                                </div>
-
-                                <div>
-
-                                    <div class="fw-semibold">
-                                        Chlorpyrifos 20%
-                                    </div>
-
-                                    <small class="text-muted">
-                                        1 Litre Bottle
-                                    </small>
-
-                                </div>
-
-                            </div>
-
-                        </td>
-
-                        <td>Pesticide</td>
-
-                        <td>Bayer</td>
-
-                        <td>48</td>
-
-                        <td>₹650</td>
-
-                        <td>
-                            <span class="badge-active">
-                                Available
-                            </span>
-                        </td>
-
-                        <td class="text-center">
-
-                            <button class="btn btn-outline-primary action-btn">
-                                <i class="fa fa-eye"></i>
-                            </button>
-
-                            <button class="btn btn-outline-success action-btn">
-                                <i class="fa fa-pen"></i>
-                            </button>
-
-                            <button class="btn btn-outline-danger action-btn">
-                                <i class="fa fa-trash"></i>
-                            </button>
-
-                        </td>
-
-                    </tr>
-
-                    <tr>
-
-                        <td>3</td>
-
-                        <td>
-
-                            <div class="d-flex align-items-center">
-
-                                <div class="member-avatar me-2">
-                                    <i class="fa-solid fa-wheat-awn"></i>
-                                </div>
-
-                                <div>
-
-                                    <div class="fw-semibold">
-                                        Hybrid Paddy Seed
-                                    </div>
-
-                                    <small class="text-muted">
-                                        10 KG Pack
-                                    </small>
-
-                                </div>
-
-                            </div>
-
-                        </td>
-
-                        <td>Seeds</td>
-
-                        <td>Syngenta</td>
-
-                        <td>25</td>
-
-                        <td>₹1,250</td>
-
-                        <td>
-                            <span class="badge-active">
-                                Available
-                            </span>
-                        </td>
-
-                        <td class="text-center">
-
-                            <button class="btn btn-outline-primary action-btn">
-                                <i class="fa fa-eye"></i>
-                            </button>
-
-                            <button class="btn btn-outline-success action-btn">
-                                <i class="fa fa-pen"></i>
-                            </button>
-
-                            <button class="btn btn-outline-danger action-btn">
-                                <i class="fa fa-trash"></i>
-                            </button>
-
-                        </td>
-
-                    </tr>
-
-                </tbody>
-
-            </table>
-
+                </table>
+                {{ $records->links('pagination::bootstrap-5') }}
+            </div>
         </div>
 
     </div>
