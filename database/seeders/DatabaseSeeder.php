@@ -33,6 +33,9 @@ class DatabaseSeeder extends Seeder
 
             // Products
             ProductSeeder::class,
+
+            // Purchase
+            PurchaseSeeder::class, // purchase and purchase item
         ]);
     }
 }
