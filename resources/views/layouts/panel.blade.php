@@ -405,7 +405,7 @@
                         <ul class="dropdown-menu">
 
                             <li><a class="dropdown-item" href="{{ route('purchases.index') }}">Purchase List</a></li>
-                            <li><a class="dropdown-item" href="#">Purchase Return</a></li>
+                            <li><a class="dropdown-item" href="{{ route('purchase-returns.index') }}">Purchase Return</a></li>
 
                         </ul>
 
