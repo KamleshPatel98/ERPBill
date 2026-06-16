@@ -33,6 +33,8 @@
     <form action="{{ route('purchases.store') }}" method="POST">
         @csrf
 
+        <textarea type="text" rows="3" class="form-control" name="items_json" id="items_json"></textarea>
+
         <!-- PURCHASE DETAILS -->
         <div class="card table-card mb-3">
 
@@ -63,7 +65,7 @@
 
                     <div class="col-md-3">
                         <label class="form-label">Supplier</label>
-                        <select name="supplier_id" class="form-select select-dropdown">
+                        <select name="supplier_id" class="form-select select-dropdown" required>
                             <option value="">Select Supplier</option>
 
                             @foreach($suppliers as $supplier)
@@ -77,7 +79,7 @@
 
                     <div class="col-md-3">
                         <label class="form-label">Financial Year</label>
-                        <select name="financial_year_id" class="form-select">
+                        <select name="financial_year_id" class="form-select" required>
                             @foreach($financialYears as $year)
                                 <option value="{{ $year->id }}">
                                     {{ $year->name }}
@@ -109,17 +111,7 @@
                                value="0">
                     </div>
 
-                    <div class="col-md-3">
-                        <label class="form-label">Discount Amount</label>
-                        <input type="number"
-                               step="0.01"
-                               name="discount_amount"
-                               id="discount_amount"
-                               class="form-control"
-                               value="0">
-                    </div>
-
-                    <div class="col-md-12">
+                    <div class="col-md-6">
                         <label class="form-label">Notes</label>
                         <textarea name="notes"
                                   rows="2"
@@ -157,8 +149,8 @@
                                 <th width="25%">Product</th>
                                 <th width="10%">Qty</th>
                                 <th width="12%">Rate</th>
-                                <th width="10%">GST%</th>
                                 <th width="10%">Discount</th>
+                                <th width="10%">GST%</th>
                                 <th width="15%">Amount</th>
                                 <th width="5%">Action</th>
                             </tr>
@@ -166,7 +158,7 @@
 
                         <tbody>
 
-                            <tr>
+                            {{-- <tr>
 
                                 <td>
                                     <select name="items[0][product_id]"
@@ -201,16 +193,16 @@
                                 <td>
                                     <input type="number"
                                            step="0.01"
-                                           name="items[0][gst]"
-                                           class="form-control gst"
+                                           name="items[0][discount]"
+                                           class="form-control discount"
                                            value="0">
                                 </td>
 
                                 <td>
                                     <input type="number"
                                            step="0.01"
-                                           name="items[0][discount]"
-                                           class="form-control discount"
+                                           name="items[0][gst]"
+                                           class="form-control gst"
                                            value="0">
                                 </td>
 
@@ -229,6 +221,54 @@
                                 </td>
 
                             </tr>
+
+                            @foreach($purchase->items as $item)
+                                <tr>
+                                    <td>
+                                        <select class="form-select product">
+                                            <option value="">Select Product</option>
+                                            @foreach($products as $product)
+                                                <option value="{{ $product->id }}"
+                                                    {{ $item->product_id == $product->id ? 'selected' : '' }}>
+                                                    {{ $product->name }}
+                                                </option>
+                                            @endforeach
+                                        </select>
+                                    </td>
+
+                                    <td>
+                                        <input type="number" class="form-control qty"
+                                            value="{{ $item->qty }}">
+                                    </td>
+
+                                    <td>
+                                        <input type="number" class="form-control rate"
+                                            value="{{ $item->rate }}">
+                                    </td>
+
+                                    <td>
+                                        <input type="number" class="form-control discount"
+                                            value="{{ $item->discount }}">
+                                    </td>
+
+                                    <td>
+                                        <input type="number" class="form-control gst"
+                                            value="{{ $item->gst }}">
+                                    </td>
+
+                                    <td>
+                                        <input type="number" class="form-control amount"
+                                            value="{{ $item->amount }}"
+                                            readonly>
+                                    </td>
+
+                                    <td>
+                                        <button type="button" class="btn btn-danger btn-sm removeRow">
+                                            <i class="fa fa-trash"></i>
+                                        </button>
+                                    </td>
+                                </tr>
+                            @endforeach --}}
 
                         </tbody>
 
@@ -313,5 +353,169 @@
     </form>
 
 @endsection
+
+@push('script')
+    <script>
+        let items = [];
+        let rowIndex = 0;
+
+        /* =========================
+        ADD ROW
+        ========================= */
+        $("#addRow").on("click", function () {
+
+            rowIndex++;
+
+            let row = `
+                <tr>
+                    <td>
+                        <select class="form-select product">
+                            <option value="">Select Product</option>
+                            @foreach($products as $product)
+                                <option value="{{ $product->id }}">{{ $product->name }}</option>
+                            @endforeach
+                        </select>
+                    </td>
+
+                    <td><input type="number" class="form-control qty" value="1"></td>
+                    <td><input type="number" class="form-control rate" value="0"></td>
+                    <td><input type="number" class="form-control discount" value="0"></td>
+                    <td>
+                        <select class="form-select gst">
+                            @foreach($gsts as $gst)
+                                <option value="{{ $gst->id }}" data-rate="{{ $gst->rate }}">
+                                    {{ $gst->name }} ({{ $gst->rate }}%)
+                                </option>
+                            @endforeach
+                        </select>
+                    </td>
+                    <td><input type="number" class="form-control amount" value="0" readonly></td>
+
+                    <td>
+                        <button type="button" class="btn btn-danger btn-sm removeRow">
+                            <i class="fa fa-trash"></i>
+                        </button>
+                    </td>
+                </tr>
+            `;
+
+            $("#purchaseTable tbody").append(row);
+
+            updateItems();
+        });
+
+
+        /* =========================
+        DELETE ROW
+        ========================= */
+        $(document).on("click", ".removeRow", function () {
+            $(this).closest("tr").remove();
+            updateItems();
+        });
+
+
+        /* =========================
+        UPDATE LOCAL ARRAY
+        ========================= */
+        function updateItems() {
+
+            items = [];
+
+            let grossAmount = 0;
+            let totalGstAmount = 0;
+            let totalDiscount = 0;
+            let totalAmount = 0;
+
+            $("#purchaseTable tbody tr").each(function () {
+
+                let row = $(this);
+
+                let product_id = row.find(".product").val();
+
+                let qty = parseFloat(row.find(".qty").val()) || 0;
+                let rate = parseFloat(row.find(".rate").val()) || 0;
+                let gst_id = row.find(".gst").val();
+                let gst_percentage = parseFloat(
+                    row.find(".gst option:selected").data("rate")
+                ) || 0;
+                let discount = parseFloat(row.find(".discount").val()) || 0;
+
+                // Gross
+                let subTotal = qty * rate;
+
+                // Discount
+                let netAmount = subTotal - discount;
+
+                // GST
+                let gstAmount = (netAmount * gst_percentage) / 100;
+
+                // Final
+                let amount = netAmount + gstAmount;
+
+                row.find(".amount").val(amount.toFixed(2));
+
+                // Summary Totals
+                grossAmount += subTotal;
+                totalDiscount += discount;
+                totalGstAmount += gstAmount;
+                totalAmount += amount;
+
+                let item = {
+                    product_id: product_id,
+                    qty: qty,
+                    rate: rate,
+                    gst_id: gst_id,
+                    gst_percentage: gst_percentage,
+                    discount: discount,
+                    amount: parseFloat(amount.toFixed(2))
+                };
+
+                if (product_id) {
+                    items.push(item);
+                }
+            });
+
+            // Paid Amount
+            let paidAmount = parseFloat($("#paid_amount").val()) || 0;
+
+            // Due Amount
+            let dueAmount = totalAmount - paidAmount;
+
+            // Update Summary
+            $("#grossAmount").text(grossAmount.toFixed(2));
+            $("#gstAmount").text(totalGstAmount.toFixed(2));
+            $("#discountAmount").text(totalDiscount.toFixed(2));
+            $("#totalAmount").text(totalAmount.toFixed(2));
+            $("#paidDisplay").text(paidAmount.toFixed(2));
+            $("#dueAmount").text(dueAmount.toFixed(2));
+
+            $("#items_json").val(JSON.stringify(items));
+        }
+
+
+        /* =========================
+        LIVE UPDATE
+        ========================= */
+        $(document).on("keyup change", "#purchaseTable input, #purchaseTable select", function () {
+            updateItems();
+        });
+
+
+        /* =========================
+        FORM SUBMIT
+        ========================= */
+        $("form").on("submit", function () {
+            updateItems();
+        });
+
+        $(document).on(
+            "keyup change",
+            "#purchaseTable input, #purchaseTable select, #paid_amount",
+            function () {
+                updateItems();
+            }
+        );
+    </script>
+@endpush
 
 <x-datepicker />

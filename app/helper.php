@@ -20,12 +20,8 @@ if (!function_exists("uploadFile"))
         if (!$file) {
             return null;
         }
-
         $filename = date('YmdHis') . '_' . rand(1111, 9999) . '.' . $file->getClientOriginalExtension();
-
-        // Store file in storage/app/public/{path}
         $file->storeAs($path, $filename);
-
         return $filename;
     }
 }

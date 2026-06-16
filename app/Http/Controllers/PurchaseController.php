@@ -3,11 +3,14 @@
 namespace App\Http\Controllers;
 
 use App\Models\Masters\FinancialYear;
+use App\Models\Masters\Gst;
 use App\Models\Masters\PaymentMode;
 use App\Models\Masters\Supplier;
 use App\Models\Product;
 use App\Models\Purchase;
+use App\Models\PurchaseItem;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
 
 class PurchaseController extends Controller
 {
@@ -47,15 +50,105 @@ class PurchaseController extends Controller
         $financialYears = FinancialYear::select('name', 'id')->where('is_active', 1)->get();
         $products = Product::with(['category:id,name', 'unit:id,name', 'gst:id,name'])
             ->select('name', 'id')->where('is_active', 1)->get();
-        return view('panel.purchases.create', compact('suppliers', 'paymentModes', 'financialYears', 'products'));
+        $gsts = Gst::select('name', 'rate', 'id')->where('is_active', 1)->get();
+        return view('panel.purchases.create', compact('suppliers', 'paymentModes', 'financialYears', 'products', 'gsts'));
     }
 
     /**
      * Store a newly created resource in storage.
      */
     public function store(Request $request)
-    {
-        //
+    { 
+        $request->validate([
+            'invoice_no' => 'required|string|max:255',
+            'invoice_date' => 'required|date',
+            'supplier_id' => 'required|exists:suppliers,id',
+            'financial_year_id' => 'required|exists:financial_years,id',
+            'payment_mode_id' => 'nullable|exists:payment_modes,id',
+            'paid_amount' => 'required|numeric|between:0,10000000',
+            'discount_amount' => 'nullable|numeric|between:0,10000000',
+            'notes' => 'nullable|string|max:1000',
+
+            'items_json' => 'required|min:1',
+            'items_json.*.product_id' => 'required|exists:products,id',
+            'items_json.*.qty' => 'required|numeric|min:1',
+            'items_json.*.rate' => 'required|numeric|min:0.01',
+            'items_json.*.gst_id'        => 'required|numeric|min:0|max:100',
+            'items_json.*.gst_percentage' => 'required|numeric|min:0|max:100',
+            'items_json.*.discount'   => 'nullable|numeric|min:0',
+            'items_json.*.amount'     => 'required|numeric|min:0.01',
+        ]);
+
+        try {
+            $purchase = Purchase::create([
+                'invoice_no' => $request->invoice_no,
+                'invoice_date' => $request->invoice_date,
+                'supplier_id' => $request->supplier_id,
+                'financial_year_id' => $request->financial_year_id,
+                'payment_mode_id' => $request->payment_mode_id,
+                'paid_amount' => $request->paid_amount,
+                'notes' => $request->notes,
+            ]);
+
+            $grossAmount = 0;
+            $gstAmountTotal = 0;
+            $discountAmountTotal = 0;
+            $totalAmount = 0;
+
+            $items = json_decode($request->items_json);
+            foreach($items as $item){
+                $subTotal = $item->qty * $item->rate; //gross
+                $netAmount = $subTotal - $item->discount; //discount
+                $gstAmount = ($netAmount * $item->gst_percentage) / 100; //gst
+                $amount = $netAmount + $gstAmount; //net
+
+                // Summary Totals
+                $grossAmount += $subTotal;
+                $discountAmountTotal += $item->discount;
+                $gstAmountTotal += $gstAmount;
+                $totalAmount += $amount;
+
+                PurchaseItem::create([
+                    'purchase_id' => $purchase->id,
+                    'product_id' => $item->product_id,
+                    'price' => $item->rate,
+                    'quantity' => $item->qty,
+                    'sub_total' => $subTotal,
+                    'discount' => $item->discount,
+                    'gst_id' => $item->gst_id,
+                    'gst_amount' => $gstAmount,
+                    'total' => $amount,
+                ]);
+            }
+
+            $paidAmount = $request->paid_amount ?? 0;
+            $dueAmount = $totalAmount - $paidAmount;
+            if ($paidAmount <= 0) {
+                $paymentStatus = 'pending';
+            } elseif ($dueAmount <= 0) {
+                $paymentStatus = 'paid';
+            } else {
+                $paymentStatus = 'partially';
+            }
+
+            $purchase->update([
+                'grand_amount'    => $grossAmount,
+                'gst_amount'      => $gstAmountTotal,
+                'discount_amount' => $discountAmountTotal,
+                'total_amount'    => $totalAmount,
+                'paid_amount'     => $paidAmount,
+                'due_amount'      => $dueAmount,
+                'payment_status'  => $paymentStatus,
+            ]);
+
+            return to_route('purchases.index')->with('success', 'Purchase created successfully');
+        } catch (\Exception $ex) {
+            Log::error("Purchase create error: ",[
+                'ex' => $ex->getMessage(),
+                'line' => __LINE__,
+            ]);
+            return back()->with('error', 'Something went wrong.');
+        }
     }
 
     /**
