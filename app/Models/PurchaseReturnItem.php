@@ -5,10 +5,10 @@ namespace App\Models;
 use App\Models\Masters\Gst;
 use Illuminate\Database\Eloquent\Model;
 
-class PurchaseItem extends Model
+class PurchaseReturnItem extends Model
 {
     protected $fillable = [
-        'purchase_id',
+        'purchase_return_id',
         'product_id',
         'price',
         'quantity',
@@ -20,9 +20,9 @@ class PurchaseItem extends Model
         'total',
     ];
 
-    public function purchase()
+    public function purchaseReturn()
     {
-        return $this->belongsTo(Purchase::class);
+        return $this->belongsTo(PurchaseReturn::class);
     }
 
     public function product()

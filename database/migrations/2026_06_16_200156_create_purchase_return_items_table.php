@@ -11,9 +11,9 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('purchase_items', function (Blueprint $table) {
+        Schema::create('purchase_return_items', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('purchase_id')->constrained()->onDelete('cascade');
+            $table->foreignId('purchase_return_id')->constrained()->onDelete('cascade');
             $table->foreignId('product_id')->constrained()->onDelete('cascade');
             $table->decimal('price', 15, 2)->default(0);       
             $table->decimal('quantity', 15, 2)->default(0);     
@@ -25,11 +25,6 @@ return new class extends Migration
             $table->decimal('total', 15, 2)->default(0);        // total = net_before_tax + gst_amount
             $table->timestamps();
         });
-
-        // sub_total = 100 × 10 = 1000
-        // after discount = 1000 - 50 = 950
-        // GST = 950 × 18% = 171
-        // total = 950 + 171 = 1121
     }
 
     /**
@@ -37,6 +32,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('purchase_items');
+        Schema::dropIfExists('purchase_return_items');
     }
 };
