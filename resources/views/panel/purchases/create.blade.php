@@ -1,6 +1,6 @@
 @extends('layouts.panel')
 
-@section('title', 'Create Purchase')
+@section('title', 'Create/Update Purchase')
 
 @section('content')
 
@@ -11,7 +11,9 @@
 
                 <div class="col-lg-8">
                     <h4 class="page-title">
-                        Create Purchase
+                        @if(isset($purchase)) Update Purchase
+                        @else Create Purchase
+                        @endif
                     </h4>
 
                     <p class="page-subtitle">
@@ -30,10 +32,14 @@
         </div>
     </div>
 
-    <form action="{{ route('purchases.store') }}" method="POST">
+    <form action="{{ isset($purchase) ? route('purchases.update', $purchase->id) : route('purchases.store') }}" method="POST">
         @csrf
 
-        <textarea type="text" rows="3" class="form-control" name="items_json" id="items_json"></textarea>
+        @isset($purchase)
+            @method('PUT')
+        @endisset
+
+        <input type="hidden" name="items_json" id="items_json" />
 
         <!-- PURCHASE DETAILS -->
         <div class="card table-card mb-3">
@@ -51,7 +57,7 @@
                         <input type="text"
                                name="invoice_no"
                                class="form-control"
-                               value="{{ generateNo("Purchase", "PUR") }}" 
+                               value="{{ isset($purchase) ? $purchase->invoice_no : generateNo("Purchase", "PUR") }}" 
                                readonly>
                     </div>
 
@@ -60,7 +66,7 @@
                         <input type="text"
                                name="invoice_date"
                                class="form-control datepicker"
-                               value="{{ old('invoice_date', date('d-m-Y')) }}">
+                               value="{{ old('invoice_date', $purchase->invoice_date ?? date('d-m-Y')) }}">
                     </div>
 
                     <div class="col-md-3">
@@ -69,7 +75,7 @@
                             <option value="">Select Supplier</option>
 
                             @foreach($suppliers as $supplier)
-                                <option value="{{ $supplier->id }}">
+                                <option value="{{ $supplier->id }}" @selected(old('supplier_id', $purchase->supplier_id ?? '') == $supplier->id)>
                                     {{ $supplier->name }}
                                 </option>
                             @endforeach
@@ -81,7 +87,7 @@
                         <label class="form-label">Financial Year</label>
                         <select name="financial_year_id" class="form-select" required>
                             @foreach($financialYears as $year)
-                                <option value="{{ $year->id }}">
+                                <option value="{{ $year->id }}" @selected(old('financial_year_id', $purchase->financial_year_id ?? '') == $year->id)>
                                     {{ $year->name }}
                                 </option>
                             @endforeach
@@ -94,7 +100,7 @@
                             <option value="">Select Mode</option>
 
                             @foreach($paymentModes as $mode)
-                                <option value="{{ $mode->id }}">
+                                <option value="{{ $mode->id }}" @selected(old('payment_mode_id', $purchase->payment_mode_id ?? '') == $mode->id)>
                                     {{ $mode->name }}
                                 </option>
                             @endforeach
@@ -108,14 +114,14 @@
                                name="paid_amount"
                                id="paid_amount"
                                class="form-control"
-                               value="0">
+                               value="{{ $purchase->paid_amount ?? 0}}">
                     </div>
 
                     <div class="col-md-6">
                         <label class="form-label">Notes</label>
                         <textarea name="notes"
                                   rows="2"
-                                  class="form-control"></textarea>
+                                  class="form-control">{{ $purchase->notes ?? ''}}</textarea>
                     </div>
 
                 </div>
@@ -515,6 +521,84 @@
                 updateItems();
             }
         );
+
+        // EFit time
+        let purchaseItems = @json($items ?? []);
+        let products = @json($products);
+        let gsts = @json($gsts);
+
+        $(document).ready(function () {
+
+            if (purchaseItems.length > 0) {
+
+                $("#purchaseTable tbody").html('');
+
+                purchaseItems.forEach(function(item) {
+
+                    let row = `
+                        <tr>
+                            <td>
+                                <select class="form-select product">
+                                    <option value="">Select Product</option>
+                                    @foreach($products as $product)
+                                        <option value="{{ $product->id }}"
+                                            ${item.product_id == {{ $product->id }} ? 'selected' : ''}>
+                                            {{ $product->name }}
+                                        </option>
+                                    @endforeach
+                                </select>
+                            </td>
+
+                            <td>
+                                <input type="number" class="form-control qty"
+                                    value="${item.quantity}">
+                            </td>
+
+                            <td>
+                                <input type="number" class="form-control rate"
+                                    value="${item.price}">
+                            </td>
+
+                            <td>
+                                <input type="number" class="form-control discount"
+                                    value="${item.discount}">
+                            </td>
+
+                            <td>
+                                <select class="form-select gst">
+                                    <option value="">Select GST</option>
+                                    @foreach($gsts as $gst)
+                                        <option value="{{ $gst->id }}"
+                                            data-rate="{{ $gst->rate }}"
+                                            ${item.gst_id == {{ $gst->id }} ? 'selected' : ''}>
+                                            {{ $gst->name }}
+                                        </option>
+                                    @endforeach
+                                </select>
+                            </td>
+
+                            <td>
+                                <input type="number"
+                                    class="form-control amount"
+                                    value="${item.total}"
+                                    readonly>
+                            </td>
+
+                            <td>
+                                <button type="button"
+                                        class="btn btn-danger btn-sm removeRow">
+                                    <i class="fa fa-trash"></i>
+                                </button>
+                            </td>
+                        </tr>
+                    `;
+
+                    $("#purchaseTable tbody").append(row);
+                });
+
+                updateItems();
+            }
+        });
     </script>
 @endpush
 
