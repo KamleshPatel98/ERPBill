@@ -126,6 +126,7 @@
 
                             <td>
                                 {{ $row->supplier?->name ?? '-' }}
+                                ({{ $row->supplier?->mobile ?? '-' }})
                             </td>
 
                             <td>
@@ -234,6 +235,81 @@
 
                                         </div>
 
+                                        <div class="mt-3">
+                                            <h6 class="mb-2">Purchase Items</h6>
+
+                                            <table class="table table-bordered table-sm">
+                                                <thead class="table-light">
+                                                    <tr>
+                                                        <th>#</th>
+                                                        <th>Product</th>
+                                                        <th class="text-end">Qty</th>
+                                                        <th class="text-end">Price</th>
+                                                        <th class="text-end">Sub Total</th>
+                                                        <th class="text-end">Discount</th>
+                                                        <th>GST</th>
+                                                        <th class="text-end">GST Amount</th>
+                                                        <th class="text-end">Total</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                    @forelse($row->purchaseItems as $key => $item)
+                                                        <tr>
+                                                            <td>{{ $key + 1 }}</td>
+                                                            <td>{{ $item->product?->name ?? '-' }}</td>
+                                                            <td class="text-end">
+                                                                {{ number_format($item->quantity, 2) }}
+                                                            </td>
+                                                            <td class="text-end">
+                                                                ₹{{ number_format($item->price, 2) }}
+                                                            </td>
+                                                            <td class="text-end">
+                                                                ₹{{ number_format($item->sub_total, 2) }}
+                                                            </td>
+                                                            <td class="text-end">
+                                                                ₹{{ number_format($item->discount, 2) }}
+                                                            </td>
+                                                            <td>
+                                                                {{ $item->gst?->name ?? '-' }}
+                                                            </td>
+                                                            <td class="text-end">
+                                                                ₹{{ number_format($item->gst_amount, 2) }}
+                                                            </td>
+                                                            <td class="text-end fw-bold">
+                                                                ₹{{ number_format($item->total, 2) }}
+                                                            </td>
+                                                        </tr>
+                                                    @empty
+                                                        <tr>
+                                                            <td colspan="9" class="text-center">
+                                                                No items found.
+                                                            </td>
+                                                        </tr>
+                                                    @endforelse
+                                                </tbody>
+
+                                                @if($row->purchaseItems->count())
+                                                    <tfoot class="table-light">
+                                                        <tr>
+                                                            <th colspan="4" class="text-end">Totals</th>
+                                                            <th class="text-end">
+                                                                ₹{{ number_format($row->grand_amount, 2) }}
+                                                            </th>
+                                                            <th class="text-end">
+                                                                ₹{{ number_format($row->discount_amount, 2) }}
+                                                            </th>
+                                                            <th></th>
+                                                            <th class="text-end">
+                                                                ₹{{ number_format($row->gst_amount, 2) }}
+                                                            </th>
+                                                            <th class="text-end">
+                                                                ₹{{ number_format($row->total_amount, 2) }}
+                                                            </th>
+                                                        </tr>
+                                                    </tfoot>
+                                                @endif
+                                            </table>
+                                        </div>
                                     </div>
 
                                 </div>

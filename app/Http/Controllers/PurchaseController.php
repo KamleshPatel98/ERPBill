@@ -20,9 +20,12 @@ class PurchaseController extends Controller
     public function index(Request $request)
     {
         $records = Purchase::with([
-            'supplier:id,name',
+            'supplier:id,name,mobile',
             'paymentMode:id,name',
             'financialYear:id,name',
+            'purchaseItems',
+            'purchaseItems.product:id,name',
+            'purchaseItems.gst:id,name'
         ])
         ->when($request->supplier_id !== null, function($q) use ($request){
             $q->where('supplier_id', $request->supplier_id);
