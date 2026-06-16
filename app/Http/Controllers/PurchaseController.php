@@ -123,6 +123,7 @@ class PurchaseController extends Controller
                     'sub_total' => $subTotal,
                     'discount' => $item->discount,
                     'gst_id' => $item->gst_id,
+                    'gst_rate' => $item->gst_percentage,
                     'gst_amount' => $gstAmount,
                     'total' => $amount,
                 ]);
@@ -251,6 +252,7 @@ class PurchaseController extends Controller
                     'sub_total' => $subTotal,
                     'discount' => $item->discount,
                     'gst_id' => $item->gst_id,
+                    'gst_rate' => $item->gst_percentage,
                     'gst_amount' => $gstAmount,
                     'total' => $amount,
                 ]);

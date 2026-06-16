@@ -270,7 +270,7 @@
                                                                 ₹{{ number_format($item->discount, 2) }}
                                                             </td>
                                                             <td>
-                                                                {{ $item->gst?->name ?? '-' }}
+                                                                {{ $item->gst_rate ?? '-' }}%
                                                             </td>
                                                             <td class="text-end">
                                                                 ₹{{ number_format($item->gst_amount, 2) }}
