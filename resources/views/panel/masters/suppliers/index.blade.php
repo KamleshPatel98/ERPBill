@@ -61,10 +61,10 @@
                 </form>
             </div>
             <div class="col-lg-2">
-                <button class="btn btn-primary">
+                <a href="{{ route('suppliers.create') }}" class="btn btn-primary">
                     <i class="fa fa-plus me-1"></i>
                     Add Supplier
-                </button>
+                </a>
             </div>
         </div>
 

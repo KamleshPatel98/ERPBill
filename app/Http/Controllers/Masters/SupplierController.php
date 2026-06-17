@@ -31,7 +31,8 @@ class SupplierController extends Controller
      */
     public function create()
     {
-        //
+        $states = State::where('is_active', 1)->select('id', 'name')->get();
+        return view('panel.masters.suppliers.create', compact('states'));
     }
 
     /**
