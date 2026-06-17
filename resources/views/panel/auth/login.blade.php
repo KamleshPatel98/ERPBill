@@ -16,7 +16,7 @@
                 <span class="input-group-text">
                     <i class="fa-solid fa-envelope"></i>
                 </span>
-                <input type="text" name="email" class="form-control" placeholder="Enter email" required>
+                <input type="text" name="email" class="form-control" placeholder="Enter email" value="{{ old('email', Cache::get('remember_email')) }}" required>
             </div>
         </div>
 
@@ -26,17 +26,14 @@
                 <span class="input-group-text">
                     <i class="fa fa-lock"></i>
                 </span>
-                <input type="password" name="password" class="form-control" placeholder="Enter password" required>
+                <input type="password" name="password" class="form-control" placeholder="Enter password" value="{{ old('password') }}" required>
             </div>
         </div>
 
         <div class="d-flex justify-content-between mb-3 small-text">
             <label>
-                <input type="checkbox"> Remember me
+                <input type="checkbox" name="remember_me" value="1" {{ Cache::has('remember_email') ? 'checked' : '' }}> Remember me
             </label>
-            {{-- <a href="#" style="color:var(--primary); text-decoration:none;">
-                Forgot password?
-            </a> --}}
         </div>
 
         <button type="submit" class="btn btn-primary w-100">
