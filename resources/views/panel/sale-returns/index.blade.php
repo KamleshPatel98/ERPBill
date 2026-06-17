@@ -1,6 +1,6 @@
 @extends('layouts.panel')
 
-@section('title', 'Sale Management')
+@section('title', 'Sale Return Management')
 
 @section('content')
 
@@ -13,11 +13,11 @@
 
             <div class="col-lg-3">
                 <h4 class="page-title">
-                    Sale Management
+                    Sale Return Management
                 </h4>
 
                 <p class="page-subtitle">
-                    Customer Sale Records
+                    Customer Sale Return Records
                 </p>
             </div>
 
@@ -74,7 +74,7 @@
             </div>
 
             <div class="col-md-1">
-                <a href="{{ route('sales.create') }}"
+                <a href="{{ route('sale-returns.create') }}"
                    class="btn btn-primary">
                     <i class="fa fa-plus me-1"></i>
                     Add
@@ -87,7 +87,7 @@
 
 </div>
 
-<!-- SALE TABLE -->
+<!-- SALE RETURN TABLE -->
 <div class="card table-card">
 
     <div class="card-body p-0">
@@ -172,12 +172,12 @@
                                         <i class="fa fa-eye"></i>
                                     </button>
 
-                                    <a href="{{ route('sales.edit',$row) }}"
+                                    <a href="{{ route('sale-returns.edit',$row) }}"
                                        class="btn btn-sm btn-outline-success">
                                         <i class="fa fa-edit"></i>
                                     </a>
 
-                                    <form action="{{ route('sales.destroy',$row) }}"
+                                    <form action="{{ route('sale-returns.destroy',$row) }}"
                                           method="POST"
                                           class="d-inline">
 
@@ -186,7 +186,7 @@
 
                                         <button type="submit"
                                                 class="btn btn-sm btn-outline-danger"
-                                                onclick="return confirm('Delete this dsale?')">
+                                                onclick="return confirm('Delete this sale?')">
                                             <i class="fa fa-trash"></i>
                                         </button>
 
@@ -236,7 +236,7 @@
                                         </div>
 
                                         <div class="mt-3">
-                                            <h6 class="mb-2">Sale Items</h6>
+                                            <h6 class="mb-2">Sale Return Items</h6>
 
                                             <table class="table table-bordered table-sm">
                                                 <thead class="table-light">
@@ -253,7 +253,7 @@
                                                     </tr>
                                                 </thead>
                                                 <tbody>
-                                                    @forelse($row->saleItems as $key => $item)
+                                                    @forelse($row->saleReturnItems as $key => $item)
                                                         <tr>
                                                             <td>{{ $key + 1 }}</td>
                                                             <td>{{ $item->product?->name ?? '-' }}</td>
@@ -288,7 +288,7 @@
                                                     @endforelse
                                                 </tbody>
 
-                                                @if($row->saleItems->count())
+                                                @if($row->saleReturnItems->count())
                                                     <tfoot class="table-light">
                                                         <tr>
                                                             <th colspan="4" class="text-end">Totals</th>
@@ -321,7 +321,7 @@
 
                         <tr>
                             <td colspan="9" class="text-center py-4">
-                                No dsale records found.
+                                No sale records found.
                             </td>
                         </tr>
 

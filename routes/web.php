@@ -13,6 +13,7 @@ use App\Http\Controllers\ProductController;
 use App\Http\Controllers\PurchaseController;
 use App\Http\Controllers\PurchaseReturnController;
 use App\Http\Controllers\SaleController;
+use App\Http\Controllers\SaleReturnController;
 use App\Http\Controllers\SettingController;
 use App\Models\Product;
 use Illuminate\Support\Facades\Route;
@@ -48,6 +49,7 @@ Route::prefix('panel')->group(function(){
 
         // Sale
         Route::resource('sales', SaleController::class);
+        Route::resource('sale-returns', SaleReturnController::class);
 
         // Setting
         Route::get('web-data', [SettingController::class, 'webData'])->name('settings.web.data');

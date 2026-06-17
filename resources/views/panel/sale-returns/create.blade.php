@@ -1,6 +1,6 @@
 @extends('layouts.panel')
 
-@section('title', 'Create/Update Sale')
+@section('title', 'Create/Update Sale Return')
 
 @section('content')
 
@@ -11,18 +11,18 @@
 
                 <div class="col-lg-8">
                     <h4 class="page-title">
-                        @if(isset($sale)) Update Sale
-                        @else Create Sale
+                        @if(isset($saleReturn)) Update Sale Return
+                        @else Create Sale Return
                         @endif
                     </h4>
 
                     <p class="page-subtitle">
-                        Customer Sale Entry & Stock Management
+                        Customer Sale Return Entry & Stock Management
                     </p>
                 </div>
 
                 <div class="col-lg-4 text-end">
-                    <a href="{{ route('sales.index') }}" class="btn btn-secondary">
+                    <a href="{{ route('sale-returns.index') }}" class="btn btn-secondary">
                         <i class="fa fa-arrow-left me-1"></i>
                         Back
                     </a>
@@ -32,10 +32,10 @@
         </div>
     </div>
 
-    <form action="{{ isset($sale) ? route('sales.update', $sale->id) : route('sales.store') }}" method="POST">
+    <form action="{{ isset($saleReturn) ? route('sale-returns.update', $saleReturn->id) : route('sale-returns.store') }}" method="POST">
         @csrf
 
-        @isset($sale)
+        @isset($saleReturn)
             @method('PUT')
         @endisset
 
@@ -45,7 +45,7 @@
         <div class="card table-card mb-3">
 
             <div class="card-header">
-                <strong>Sale Information</strong>
+                <strong>Sale Return Information</strong>
             </div>
 
             <div class="card-body">
@@ -57,7 +57,7 @@
                         <input type="text"
                                name="invoice_no"
                                class="form-control"
-                               value="{{ isset($sale) ? $sale->invoice_no : generateNo("Sale", "SAL") }}" 
+                               value="{{ isset($saleReturn) ? $saleReturn->invoice_no : generateNo("SaleReturn", "SRN") }}" 
                                readonly>
                     </div>
 
@@ -66,7 +66,7 @@
                         <input type="text"
                                name="invoice_date"
                                class="form-control datepicker"
-                               value="{{ old('invoice_date', $sale->invoice_date ?? date('d-m-Y')) }}">
+                               value="{{ old('invoice_date', $saleReturn->invoice_date ?? date('d-m-Y')) }}">
                     </div>
 
                     <div class="col-md-3">
@@ -75,7 +75,7 @@
                             <option value="">Select Customer</option>
 
                             @foreach($customers as $customer)
-                                <option value="{{ $customer->id }}" @selected(old('customer_id', $sale->customer_id ?? '') == $customer->id)>
+                                <option value="{{ $customer->id }}" @selected(old('customer_id', $saleReturn->customer_id ?? '') == $customer->id)>
                                     {{ $customer->name }} ({{ $customer->mobile }})
                                 </option>
                             @endforeach
@@ -87,7 +87,7 @@
                         <label class="form-label">Financial Year</label>
                         <select name="financial_year_id" class="form-select" required>
                             @foreach($financialYears as $year)
-                                <option value="{{ $year->id }}" @selected(old('financial_year_id', $sale->financial_year_id ?? '') == $year->id)>
+                                <option value="{{ $year->id }}" @selected(old('financial_year_id', $saleReturn->financial_year_id ?? '') == $year->id)>
                                     {{ $year->name }}
                                 </option>
                             @endforeach
@@ -100,7 +100,7 @@
                             <option value="">Select Mode</option>
 
                             @foreach($paymentModes as $mode)
-                                <option value="{{ $mode->id }}" @selected(old('payment_mode_id', $sale->payment_mode_id ?? '') == $mode->id)>
+                                <option value="{{ $mode->id }}" @selected(old('payment_mode_id', $saleReturn->payment_mode_id ?? '') == $mode->id)>
                                     {{ $mode->name }}
                                 </option>
                             @endforeach
@@ -108,20 +108,20 @@
                     </div>
 
                     <div class="col-md-3">
-                        <label class="form-label">Paid Amount</label>
+                        <label class="form-label">Refund Amount</label>
                         <input type="number"
                                step="0.01"
-                               name="paid_amount"
-                               id="paid_amount"
+                               name="refund_amount"
+                               id="refund_amount"
                                class="form-control"
-                               value="{{ $sale->paid_amount ?? 0}}">
+                               value="{{ $saleReturn->refund_amount ?? 0}}">
                     </div>
 
                     <div class="col-md-6">
                         <label class="form-label">Notes</label>
                         <textarea name="notes"
                                   rows="2"
-                                  class="form-control">{{ $sale->notes ?? ''}}</textarea>
+                                  class="form-control">{{ $saleReturn->notes ?? ''}}</textarea>
                     </div>
 
                 </div>
@@ -134,7 +134,7 @@
         <div class="card table-card mb-3">
 
             <div class="card-header d-flex justify-content-between align-items-center">
-                <strong>Sale Items</strong>
+                <strong>Sale Return Items</strong>
 
                 <button type="button"
                         class="btn btn-sm btn-primary"
@@ -178,7 +178,7 @@
         <div class="card table-card mb-3">
 
             <div class="card-header">
-                <strong>Sale Summary</strong>
+                <strong>Sale Return Summary</strong>
             </div>
 
             <div class="card-body">
@@ -231,7 +231,7 @@
 
         <div class="text-end mb-4">
 
-            <a href="{{ route('sales.index') }}"
+            <a href="{{ route('sale-returns.index') }}"
                class="btn btn-secondary">
                 Cancel
             </a>
@@ -239,7 +239,7 @@
             <button type="submit"
                     class="btn btn-primary">
                 <i class="fa fa-save me-1"></i>
-                Save Sale
+                Save Sale Return
             </button>
 
         </div>
@@ -370,7 +370,7 @@
             });
 
             // Paid Amount
-            let paidAmount = parseFloat($("#paid_amount").val()) || 0;
+            let paidAmount = parseFloat($("#refund_amount").val()) || 0;
 
             // Due Amount
             let dueAmount = totalAmount - paidAmount;
@@ -404,7 +404,7 @@
 
         $(document).on(
             "keyup change",
-            "#saleTable input, #saleTable select, #paid_amount",
+            "#saleTable input, #saleTable select, #refund_amount",
             function () {
                 updateItems();
             }

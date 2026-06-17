@@ -423,11 +423,9 @@
                         </a>
 
                         <ul class="dropdown-menu">
-
                             <li><a class="dropdown-item" href="{{ route('sales.index') }}">Sale Entry</a></li>
-                            <li><a class="dropdown-item" href="#">Sale Return</a></li>
+                            <li><a class="dropdown-item" href="{{ route('sale-returns.index') }}">Sale Return</a></li>
                             <li><a class="dropdown-item" href="#">Customer Ledger</a></li>
-
                         </ul>
 
                     </li>
