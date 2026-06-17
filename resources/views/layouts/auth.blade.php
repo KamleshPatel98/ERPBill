@@ -85,6 +85,7 @@
 </head>
 
 <body>
+    <x-alert />
 
     <div class="login-card">
 
