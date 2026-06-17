@@ -87,7 +87,7 @@
 
 </div>
 
-<!-- PURCHASE TABLE -->
+<!-- PURCHASE Return TABLE -->
 <div class="card table-card">
 
     <div class="card-body p-0">
@@ -236,7 +236,7 @@
                                         </div>
 
                                         <div class="mt-3">
-                                            <h6 class="mb-2">Purchase Items</h6>
+                                            <h6 class="mb-2">Purchase Return Items</h6>
 
                                             <table class="table table-bordered table-sm">
                                                 <thead class="table-light">
@@ -253,7 +253,7 @@
                                                     </tr>
                                                 </thead>
                                                 <tbody>
-                                                    @forelse($row->purchaseItems as $key => $item)
+                                                    @forelse($row->purchaseReturnItems as $key => $item)
                                                         <tr>
                                                             <td>{{ $key + 1 }}</td>
                                                             <td>{{ $item->product?->name ?? '-' }}</td>
@@ -288,7 +288,7 @@
                                                     @endforelse
                                                 </tbody>
 
-                                                @if($row->purchaseItems->count())
+                                                @if($row->purchaseReturnItems->count())
                                                     <tfoot class="table-light">
                                                         <tr>
                                                             <th colspan="4" class="text-end">Totals</th>
@@ -321,7 +321,7 @@
 
                         <tr>
                             <td colspan="9" class="text-center py-4">
-                                No purchase records found.
+                                No purchase return records found.
                             </td>
                         </tr>
 

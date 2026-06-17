@@ -107,7 +107,7 @@
                         </select>
                     </div>
 
-                    <div class="col-md-3">
+                    {{-- <div class="col-md-3">
                         <label class="form-label">Return Amount</label>
                         <input type="number"
                                step="0.01"
@@ -115,7 +115,7 @@
                                id="refund_amount"
                                class="form-control"
                                value="{{ $purchase->refund_amount ?? 0}}">
-                    </div>
+                    </div> --}}
 
                     <div class="col-md-6">
                         <label class="form-label">Notes</label>
@@ -210,8 +210,15 @@
                             </tr>
 
                             <tr>
-                                <th>Paid Amount</th>
-                                <td class="text-end">₹ <span id="paidDisplay">0.00</span></td>
+                                <th>Return Amount</th>
+                                <td class="text-end"> \
+                                    <input type="number"
+                                        step="0.01"
+                                        name="refund_amount"
+                                        id="refund_amount"
+                                        class="form-control"
+                                        value="{{ $purchase->refund_amount ?? 0}}">
+                                </td>
                             </tr>
 
                             <tr class="table-warning">
