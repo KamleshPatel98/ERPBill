@@ -149,7 +149,7 @@ class PurchaseReturnController extends Controller
                 'payment_status'  => $paymentStatus,
             ]);
 
-            return to_route('purchases.index')->with('success', 'Purchase created successfully');
+            return to_route('purchase-returns.index')->with('success', 'Purchase created successfully');
         } catch (\Exception $ex) {
             Log::error("Purchase create error: ",[
                 'ex' => $ex->getMessage(),
@@ -172,7 +172,15 @@ class PurchaseReturnController extends Controller
      */
     public function edit(PurchaseReturn $purchaseReturn)
     {
-        //
+        $suppliers = Supplier::select('name', 'id', 'mobile')->where('is_active', 1)->get();
+        $paymentModes = PaymentMode::select('name', 'id')->where('is_active', 1)->get();
+        $financialYears = FinancialYear::select('name', 'id')->where('is_active', 1)->get();
+        $products = Product::with(['category:id,name', 'unit:id,name', 'gst:id,name'])
+            ->select('name', 'id')->where('is_active', 1)->get();
+        $gsts = Gst::select('name', 'rate', 'id')->where('is_active', 1)->get();
+        $items = PurchaseReturnItem::with(['product:id,name', 'gst:id,name'])
+            ->where('purchase_return_id', $purchaseReturn->id)->get();
+        return view('panel.purchase-returns.create', compact('suppliers', 'paymentModes', 'financialYears', 'products', 'gsts','purchaseReturn', 'items'));
     }
 
     /**
@@ -180,7 +188,104 @@ class PurchaseReturnController extends Controller
      */
     public function update(Request $request, PurchaseReturn $purchaseReturn)
     {
-        //
+        $request->validate([
+            'invoice_no' => 'required|string|max:255',
+            'invoice_date' => 'required|date',
+            'supplier_id' => 'required|exists:suppliers,id',
+            'financial_year_id' => 'required|exists:financial_years,id',
+            'payment_mode_id' => 'nullable|exists:payment_modes,id',
+            'refund_amount' => 'required|numeric|between:0,10000000',
+            'discount_amount' => 'nullable|numeric|between:0,10000000',
+            'notes' => 'nullable|string|max:1000',
+
+            'items_json' => 'required|json|min:1',
+            'items_json.*.product_id' => 'required|exists:products,id',
+            'items_json.*.qty' => 'required|numeric|min:1',
+            'items_json.*.rate' => 'required|numeric|min:0.01',
+            'items_json.*.gst_id'        => 'required|numeric|min:0|max:100',
+            'items_json.*.gst_percentage' => 'required|numeric|min:0|max:100',
+            'items_json.*.discount'   => 'nullable|numeric|min:0',
+            'items_json.*.amount'     => 'required|numeric|min:0.01',
+        ]);
+
+        try {
+            $purchaseReturn->update([
+                'invoice_no' => $request->invoice_no,
+                'invoice_date' => $request->invoice_date,
+                'supplier_id' => $request->supplier_id,
+                'financial_year_id' => $request->financial_year_id,
+                'payment_mode_id' => $request->payment_mode_id,
+                'refund_amount' => $request->refund_amount,
+                'notes' => $request->notes,
+            ]);
+
+            $grossAmount = 0;
+            $gstAmountTotal = 0;
+            $discountAmountTotal = 0;
+            $totalAmount = 0;
+
+            // old items delete
+            PurchaseReturnItem::where('purchase_return_id', $purchaseReturn->id)->delete();
+
+            $items = json_decode($request->items_json);
+            if (empty($items)) {
+                return back()->with('error', 'At least one item is required.');
+            }
+            
+            foreach($items as $item){
+                $subTotal = $item->qty * $item->rate; //gross
+                $netAmount = $subTotal - $item->discount; //discount
+                $gstAmount = ($netAmount * $item->gst_percentage) / 100; //gst
+                $amount = $netAmount + $gstAmount; //net
+
+                // Summary Totals
+                $grossAmount += $subTotal;
+                $discountAmountTotal += $item->discount;
+                $gstAmountTotal += $gstAmount;
+                $totalAmount += $amount;
+
+                PurchaseReturnItem::create([
+                    'purchase_return_id' => $purchaseReturn->id,
+                    'product_id' => $item->product_id,
+                    'price' => $item->rate,
+                    'quantity' => $item->qty,
+                    'sub_total' => $subTotal,
+                    'discount' => $item->discount,
+                    'gst_id' => $item->gst_id,
+                    'gst_rate' => $item->gst_percentage,
+                    'gst_amount' => $gstAmount,
+                    'total' => $amount,
+                ]);
+            }
+
+            $paidAmount = $request->refund_amount ?? 0;
+            $dueAmount = $totalAmount - $paidAmount;
+            if ($paidAmount <= 0) {
+                $paymentStatus = 'pending';
+            } elseif ($dueAmount <= 0) {
+                $paymentStatus = 'paid';
+            } else {
+                $paymentStatus = 'partially';
+            }
+
+            $purchaseReturn->update([
+                'grand_amount'    => $grossAmount,
+                'gst_amount'      => $gstAmountTotal,
+                'discount_amount' => $discountAmountTotal,
+                'total_amount'    => $totalAmount,
+                'refund_amount'     => $paidAmount,
+                'due_amount'      => $dueAmount,
+                'payment_status'  => $paymentStatus,
+            ]);
+
+            return to_route('purchase-returns.index')->with('success', 'Purchase return updated successfully');
+        } catch (\Exception $ex) {
+            Log::error("Purchase update error: ",[
+                'ex' => $ex->getMessage(),
+                'line' => __LINE__,
+            ]);
+            return back()->with('error', 'Something went wrong.');
+        }
     }
 
     /**

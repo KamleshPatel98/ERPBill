@@ -103,7 +103,7 @@
                         <th>Date</th>
                         <th>Supplier</th>
                         <th>Total</th>
-                        <th>Paid</th>
+                        <th>Return</th>
                         <th>Due</th>
                         <th>Status</th>
                         <th class="text-center">Action</th>
@@ -134,7 +134,7 @@
                             </td>
 
                             <td>
-                                ₹{{ number_format($row->paid_amount,2) }}
+                                ₹{{ number_format($row->refund_amount,2) }}
                             </td>
 
                             <td>

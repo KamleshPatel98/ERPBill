@@ -11,7 +11,7 @@
 
                 <div class="col-lg-8">
                     <h4 class="page-title">
-                        @if(isset($purchase)) Update Purchase Return
+                        @if(isset($purchaseReturn)) Update Purchase Return
                         @else Create Purchase return
                         @endif
                     </h4>
@@ -32,10 +32,10 @@
         </div>
     </div>
 
-    <form action="{{ isset($purchase) ? route('purchase-returns.update', $purchase->id) : route('purchase-returns.store') }}" method="POST">
+    <form action="{{ isset($purchaseReturn) ? route('purchase-returns.update', $purchaseReturn->id) : route('purchase-returns.store') }}" method="POST">
         @csrf
 
-        @isset($purchase)
+        @isset($purchaseReturn)
             @method('PUT')
         @endisset
 
@@ -45,7 +45,7 @@
         <div class="card table-card mb-3">
 
             <div class="card-header">
-                <strong>Purchase Information</strong>
+                <strong>Purchase Return Information</strong>
             </div>
 
             <div class="card-body">
@@ -57,7 +57,7 @@
                         <input type="text"
                                name="invoice_no"
                                class="form-control"
-                               value="{{ isset($purchase) ? $purchase->invoice_no : generateNo("PurchaseReturn", "PRET") }}" 
+                               value="{{ isset($purchaseReturn) ? $purchaseReturn->invoice_no : generateNo("PurchaseReturn", "PRET") }}" 
                                readonly>
                     </div>
 
@@ -66,7 +66,7 @@
                         <input type="text"
                                name="invoice_date"
                                class="form-control datepicker"
-                               value="{{ old('invoice_date', $purchase->invoice_date ?? date('d-m-Y')) }}">
+                               value="{{ old('invoice_date', $purchaseReturn->invoice_date ?? date('d-m-Y')) }}">
                     </div>
 
                     <div class="col-md-3">
@@ -75,7 +75,7 @@
                             <option value="">Select Supplier</option>
 
                             @foreach($suppliers as $supplier)
-                                <option value="{{ $supplier->id }}" @selected(old('supplier_id', $purchase->supplier_id ?? '') == $supplier->id)>
+                                <option value="{{ $supplier->id }}" @selected(old('supplier_id', $purchaseReturn->supplier_id ?? '') == $supplier->id)>
                                     {{ $supplier->name }}
                                 </option>
                             @endforeach
@@ -87,7 +87,7 @@
                         <label class="form-label">Financial Year</label>
                         <select name="financial_year_id" class="form-select" required>
                             @foreach($financialYears as $year)
-                                <option value="{{ $year->id }}" @selected(old('financial_year_id', $purchase->financial_year_id ?? '') == $year->id)>
+                                <option value="{{ $year->id }}" @selected(old('financial_year_id', $purchaseReturn->financial_year_id ?? '') == $year->id)>
                                     {{ $year->name }}
                                 </option>
                             @endforeach
@@ -100,7 +100,7 @@
                             <option value="">Select Mode</option>
 
                             @foreach($paymentModes as $mode)
-                                <option value="{{ $mode->id }}" @selected(old('payment_mode_id', $purchase->payment_mode_id ?? '') == $mode->id)>
+                                <option value="{{ $mode->id }}" @selected(old('payment_mode_id', $purchaseReturn->payment_mode_id ?? '') == $mode->id)>
                                     {{ $mode->name }}
                                 </option>
                             @endforeach
@@ -114,14 +114,14 @@
                                name="refund_amount"
                                id="refund_amount"
                                class="form-control"
-                               value="{{ $purchase->refund_amount ?? 0}}">
+                               value="{{ $purchaseReturn->refund_amount ?? 0}}">
                     </div> --}}
 
                     <div class="col-md-6">
                         <label class="form-label">Notes</label>
                         <textarea name="notes"
                                   rows="2"
-                                  class="form-control">{{ $purchase->notes ?? ''}}</textarea>
+                                  class="form-control">{{ $purchaseReturn->notes ?? ''}}</textarea>
                     </div>
 
                 </div>
@@ -134,7 +134,7 @@
         <div class="card table-card mb-3">
 
             <div class="card-header d-flex justify-content-between align-items-center">
-                <strong>Purchase Items</strong>
+                <strong>Purchase Return Items</strong>
 
                 <button type="button"
                         class="btn btn-sm btn-primary"
@@ -211,13 +211,13 @@
 
                             <tr>
                                 <th>Return Amount</th>
-                                <td class="text-end"> \
+                                <td class="text-end"> 
                                     <input type="number"
                                         step="0.01"
                                         name="refund_amount"
                                         id="refund_amount"
                                         class="form-control"
-                                        value="{{ $purchase->refund_amount ?? 0}}">
+                                        value="{{ $purchaseReturn->refund_amount ?? 0}}">
                                 </td>
                             </tr>
 
