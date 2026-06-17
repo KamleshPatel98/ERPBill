@@ -35,12 +35,12 @@
                         </div>
 
                         <div class="col-md-3">
-                            <select name="supplier_id" class="form-select">
+                            <select name="customer_id" class="form-select">
                                 <option value="">All Customers</option>
 
                                 @foreach($customers as $customer)
                                     <option value="{{ $customer->id }}"
-                                        @selected(request('supplier_id') == $customer->id)>
+                                        @selected(request('customer_id') == $customer->id)>
                                         {{ $customer->name }} ({{ $customer->mobile }})
                                     </option>
                                 @endforeach
