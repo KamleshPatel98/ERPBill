@@ -51,8 +51,7 @@ class PurchaseController extends Controller
         $suppliers = Supplier::select('name', 'id', 'mobile')->where('is_active', 1)->get();
         $paymentModes = PaymentMode::select('name', 'id')->where('is_active', 1)->get();
         $financialYears = FinancialYear::select('name', 'id')->where('is_active', 1)->get();
-        $products = Product::with(['category:id,name', 'unit:id,name', 'gst:id,name'])
-            ->select('name', 'id')->where('is_active', 1)->get();
+        $products = Product::select('name', 'id')->where('is_active', 1)->get();
         $gsts = Gst::select('name', 'rate', 'id')->where('is_active', 1)->get();
         return view('panel.purchases.create', compact('suppliers', 'paymentModes', 'financialYears', 'products', 'gsts'));
     }
@@ -175,8 +174,7 @@ class PurchaseController extends Controller
         $suppliers = Supplier::select('name', 'id', 'mobile')->where('is_active', 1)->get();
         $paymentModes = PaymentMode::select('name', 'id')->where('is_active', 1)->get();
         $financialYears = FinancialYear::select('name', 'id')->where('is_active', 1)->get();
-        $products = Product::with(['category:id,name', 'unit:id,name', 'gst:id,name'])
-            ->select('name', 'id')->where('is_active', 1)->get();
+        $products = Product::select('name', 'id')->where('is_active', 1)->get();
         $gsts = Gst::select('name', 'rate', 'id')->where('is_active', 1)->get();
         $items = PurchaseItem::with(['product:id,name', 'gst:id,name'])
             ->where('purchase_id', $purchase->id)->get();

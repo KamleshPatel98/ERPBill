@@ -52,8 +52,7 @@ class SaleReturnController extends Controller
         $customers = Customer::select('name', 'id', 'mobile')->where('is_active', 1)->get();
         $paymentModes = PaymentMode::select('name', 'id')->where('is_active', 1)->get();
         $financialYears = FinancialYear::select('name', 'id')->where('is_active', 1)->get();
-        $products = Product::with(['category:id,name', 'unit:id,name', 'gst:id,name'])
-            ->select('name', 'id')->where('is_active', 1)->get();
+        $products = Product::select('name', 'id')->where('is_active', 1)->get();
         $gsts = Gst::select('name', 'rate', 'id')->where('is_active', 1)->get();
         return view('panel.sale-returns.create', compact('customers', 'paymentModes', 'financialYears', 'products', 'gsts'));
     }
@@ -192,8 +191,7 @@ class SaleReturnController extends Controller
         $customers = Customer::select('name', 'id', 'mobile')->where('is_active', 1)->get();
         $paymentModes = PaymentMode::select('name', 'id')->where('is_active', 1)->get();
         $financialYears = FinancialYear::select('name', 'id')->where('is_active', 1)->get();
-        $products = Product::with(['category:id,name', 'unit:id,name', 'gst:id,name'])
-            ->select('name', 'id')->where('is_active', 1)->get();
+        $products = Product::select('name', 'id')->where('is_active', 1)->get();
         $gsts = Gst::select('name', 'rate', 'id')->where('is_active', 1)->get();
         $items = SaleReturnItem::with(['product:id,name', 'gst:id,name'])
             ->where('sale_return_id', $saleReturn->id)->get();
