@@ -127,3 +127,5 @@
 </div>
 
 @endsection
+
+<x-dropdown />
