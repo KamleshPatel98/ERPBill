@@ -332,6 +332,13 @@
 
             $("#saleTable tbody").append(row);
 
+            // reinitialize
+            $('.form-select').select2({
+                width: '100%',
+                placeholder: 'Select an option',
+                allowClear: true
+            });
+
             updateItems();
         });
 
@@ -521,6 +528,13 @@
                     $("#saleTable tbody").append(row);
                 });
 
+                // reinitialize
+                $('.form-select').select2({
+                    width: '100%',
+                    placeholder: 'Select an option',
+                    allowClear: true
+                });
+
                 updateItems();
             }
         });
@@ -544,3 +558,4 @@
 @endpush
 
 <x-datepicker />
+<x-dropdown />
