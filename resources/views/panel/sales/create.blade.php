@@ -332,13 +332,7 @@
 
             $("#saleTable tbody").append(row);
 
-            // reinitialize
-            $('.form-select').select2({
-                width: '100%',
-                placeholder: 'Select an option',
-                allowClear: true
-            });
-
+            formSelect();
             updateItems();
         });
 
@@ -528,13 +522,7 @@
                     $("#saleTable tbody").append(row);
                 });
 
-                // reinitialize
-                $('.form-select').select2({
-                    width: '100%',
-                    placeholder: 'Select an option',
-                    allowClear: true
-                });
-
+                formSelect();
                 updateItems();
             }
         });

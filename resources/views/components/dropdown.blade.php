@@ -18,12 +18,19 @@
 @push('script')
     <script src="{{ asset('assets/select2/select2.min.js') }}"></script>
     <script>
-        $(document).ready(function() {
-            $('.form-select').select2({
-                width: '100%',
-                placeholder: 'Select an option',
-                allowClear: true
+        function formSelect(){
+            $('.form-select').each(function() {
+                let placeholder = $(this).find('option:first').text();
+
+                $(this).select2({
+                    width: '100%',
+                    placeholder: placeholder,
+                    allowClear: true
+                });
             });
+        }
+        $(document).ready(function() {
+            formSelect();
             $('.select-dropdown.multiple').select2({
                 width: '100%',
                 multiple: true,

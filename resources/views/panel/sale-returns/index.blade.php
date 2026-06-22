@@ -342,3 +342,5 @@
 </div>
 
 @endsection
+
+<x-dropdown />

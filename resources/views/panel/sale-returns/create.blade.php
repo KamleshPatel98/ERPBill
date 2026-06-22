@@ -332,6 +332,7 @@
 
             $("#saleTable tbody").append(row);
 
+            formSelect();
             updateItems();
         });
 
@@ -521,6 +522,7 @@
                     $("#saleTable tbody").append(row);
                 });
 
+                formSelect();
                 updateItems();
             }
         });
@@ -544,3 +546,4 @@
 @endpush
 
 <x-datepicker />
+<x-dropdown />
