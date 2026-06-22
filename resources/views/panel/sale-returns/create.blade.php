@@ -45,7 +45,27 @@
         <div class="card table-card mb-3">
 
             <div class="card-header">
-                <strong>Sale Return Information</strong>
+                <div class="d-flex justify-content-between">
+                    <strong>Sale Return Information</strong>
+
+                    @if(empty($saleReturn))
+                    <div>
+                        <div class="btn-group" role="group">
+                            <input type="radio" class="btn-check" name="customer_type"
+                                id="existingCustomer" value="existing" checked>
+                            <label class="btn btn-outline-primary btn-sm" for="existingCustomer">
+                                Existing Customer
+                            </label>
+
+                            <input type="radio" class="btn-check" name="customer_type"
+                                id="newCustomer" value="new">
+                            <label class="btn btn-outline-success btn-sm" for="newCustomer">
+                                New Customer
+                            </label>
+                        </div>
+                    </div>
+                    @endif
+                </div>
             </div>
 
             <div class="card-body">
@@ -69,18 +89,35 @@
                                value="{{ old('invoice_date', $saleReturn->invoice_date ?? date('d-m-Y')) }}">
                     </div>
 
-                    <div class="col-md-3">
+                                        <!-- Existing Customer -->
+                    <div class="col-md-3 existingCustomerSection">
                         <label class="form-label">Customer</label>
-                        <select name="customer_id" class="form-select select-dropdown" required>
+                        <select name="customer_id" class="form-select select-dropdown">
                             <option value="">Select Customer</option>
 
                             @foreach($customers as $customer)
-                                <option value="{{ $customer->id }}" @selected(old('customer_id', $saleReturn->customer_id ?? '') == $customer->id)>
+                                <option value="{{ $customer->id }}"
+                                    @selected(old('customer_id', $sale->customer_id ?? '') == $customer->id)>
                                     {{ $customer->name }} ({{ $customer->mobile }})
                                 </option>
                             @endforeach
-
                         </select>
+                    </div>
+
+                    <!-- New Customer -->
+                    <div class="col-md-3 newCustomerSection d-none">
+                        <label class="form-label">Customer Name</label>
+                        <input type="text" name="name" class="form-control">
+                    </div>
+
+                    <div class="col-md-3 newCustomerSection d-none">
+                        <label class="form-label">Mobile</label>
+                        <input type="text" name="mobile" class="form-control">
+                    </div>
+
+                    <div class="col-md-3 newCustomerSection d-none">
+                        <label class="form-label">Address</label>
+                        <input type="text" name="address" class="form-control">
                     </div>
 
                     <div class="col-md-3">
@@ -486,6 +523,22 @@
 
                 updateItems();
             }
+        });
+    </script>
+
+    <script>
+        $(document).ready(function () {
+
+            $('input[name="customer_type"]').on('change', function () {
+                if ($(this).val() === 'new') {
+                    $('.existingCustomerSection').addClass('d-none');
+                    $('.newCustomerSection').removeClass('d-none');
+                } else {
+                    $('.newCustomerSection').addClass('d-none');
+                    $('.existingCustomerSection').removeClass('d-none');
+                }
+            });
+
         });
     </script>
 @endpush

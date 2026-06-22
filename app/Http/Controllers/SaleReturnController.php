@@ -66,12 +66,17 @@ class SaleReturnController extends Controller
         $request->validate([
             'invoice_no' => 'required|string|max:255',
             'invoice_date' => 'required|date',
-            'customer_id' => 'required|exists:customers,id',
             'financial_year_id' => 'required|exists:financial_years,id',
             'payment_mode_id' => 'nullable|exists:payment_modes,id',
             'refund_amount' => 'required|numeric|between:0,10000000',
             'discount_amount' => 'nullable|numeric|between:0,10000000',
             'notes' => 'nullable|string|max:1000',
+
+            'customer_type' => 'required|in:new,existing',
+            'customer_id' => 'nullable|required_if:customer_type,existing|exists:customers,id',
+            'name' => 'nullable|required_if:customer_type,new|string|max:70',
+            'mobile' => 'nullable|required_if:customer_type,new|numeric|digits:10|unique:customers,mobile',
+            'address' => 'nullable|required_if:customer_type,new|string|max:1000',
 
             'items_json' => 'required|json|min:1',
             'items_json.*.product_id' => 'required|exists:products,id',
@@ -84,10 +89,21 @@ class SaleReturnController extends Controller
         ]);
 
         try {
+            if($request->customer_type == 'new'){
+                $customer = Customer::create([
+                    'name' => $request->name,
+                    'mobile' => $request->mobile,
+                    'address' => $request->address,
+                ]);
+                $customer_id = $customer->id;
+            }else{
+                $customer_id = $request->customer_id;
+            }
+
             $saleReturn = SaleReturn::create([
                 'invoice_no' => $request->invoice_no,
                 'invoice_date' => $request->invoice_date,
-                'customer_id' => $request->customer_id,
+                'customer_id' => $customer_id,
                 'financial_year_id' => $request->financial_year_id,
                 'payment_mode_id' => $request->payment_mode_id,
                 'refund_amount' => $request->refund_amount,
