@@ -210,6 +210,96 @@
                     <canvas id="salesPurchaseChart" height="110"></canvas>
                 </div>
             </div>
+
+            <div class="card table-card mt-4">
+                <div class="card-header d-flex justify-content-between align-items-center">
+                    <h6 class="mb-0 fw-bold">Recent Transactions</h6>
+                    <div>
+                        <a href="{{ route('sales.index') }}" class="btn btn-sm btn-success">
+                            <i class="fa-solid fa-cart-shopping me-1"></i> Sales
+                        </a>
+
+                        <a href="{{ route('purchases.index') }}" class="btn btn-sm btn-info">
+                            <i class="fa-solid fa-cart-plus me-1"></i> Purchases
+                        </a>
+                    </div>
+                </div>
+
+                <div class="table-responsive">
+                    <table class="table table-hover align-middle mb-0">
+                        <thead>
+                            <tr>
+                                <th>Type</th>
+                                <th>Invoice</th>
+                                <th>Party</th>
+                                <th>Date</th>
+                                <th class="text-end">Amount</th>
+                                <th class="text-center">Status</th>
+                            </tr>
+                        </thead>
+
+                        <tbody>
+                            @forelse($transactions as $transaction)
+                                <tr>
+
+                                    <td>
+                                        <span class="badge {{ $transaction->type == 'Sale' ? 'bg-success' : 'bg-primary' }}">
+                                            {{ $transaction->type }}
+                                        </span>
+                                    </td>
+
+                                    <td>
+                                        <span class="fw-semibold">
+                                            {{ $transaction->invoice_no }}
+                                        </span>
+                                    </td>
+
+                                    <td>
+                                        <div class="fw-semibold">
+                                            <div class="fw-semibold text-dark">
+                                                {{ $transaction->party_name }}
+                                            </div>
+
+                                            <small class="text-muted">
+                                                <i class="fa-solid fa-phone me-1"></i>
+                                                {{ $transaction->party_mobile }}
+                                            </small>
+                                        </div>
+                                    </td>
+
+                                    <td>
+                                        {{ $transaction->invoice_date }}
+                                    </td>
+
+                                    <td class="text-end fw-semibold">
+                                        ₹{{ number_format($transaction->amount, 2) }}
+                                    </td>
+
+                                    <td class="text-center">
+                                        <span class="badge
+                                            {{
+                                                match(strtolower($transaction->payment_status)) {
+                                                    'paid' => 'bg-success',
+                                                    'partially' => 'bg-info text-dark',
+                                                    default => 'bg-warning text-dark',
+                                                }
+                                            }}">
+                                            {{ ucfirst($transaction->payment_status) }}
+                                        </span>
+                                    </td>
+
+                                </tr>
+                            @empty
+                                <tr>
+                                    <td colspan="6" class="text-center py-4 text-muted">
+                                        No transactions found.
+                                    </td>
+                                </tr>
+                            @endforelse
+                        </tbody>
+                    </table>
+                </div>
+            </div>
         </div>
 
         <!-- QUICK ACTIONS -->

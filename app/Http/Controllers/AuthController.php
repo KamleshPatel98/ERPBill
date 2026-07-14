@@ -56,7 +56,7 @@ class AuthController extends Controller
             ->withSum('saleReturnItems as sale_return_qty', 'quantity')
             ->get();
 
-        $perPage = 5;
+        $perPage = getSetting('page_limit');
         $page = request()->get('page', 1);
 
         $lowStockProducts = $products
@@ -69,21 +69,10 @@ class AuthController extends Controller
 
                 return $product;
             })
-            ->where('current_stock', '<', 500)
+            ->where('current_stock', '<', 10)
             ->sortBy('current_stock')
             ->values();
         $lowStockCount = $lowStockProducts->count();
-
-        $lowStockProducts = new LengthAwarePaginator(
-            $lowStockProducts->forPage($page, $perPage),
-            $lowStockProducts->count(),
-            $perPage,
-            $page,
-            [
-                'path' => request()->url(),
-                'query' => request()->query(),
-            ]
-        );
 
         $stats = [
             'totalSaleAmt' => $sale,
@@ -129,7 +118,62 @@ class AuthController extends Controller
             'purchases' => $purchaseData,
         ];
 
-        return view('panel.dashboard', compact('stats', 'graph', 'lowStockProducts'));
+
+        $lowStockProducts = new LengthAwarePaginator(
+            $lowStockProducts->forPage($page, $perPage),
+            $lowStockProducts->count(),
+            $perPage,
+            $page,
+            [
+                'path' => request()->url(),
+                'query' => request()->query(),
+            ]
+        );
+
+
+        $sales = Sale::query()
+            ->select([
+                DB::raw("'Sale' as type"),
+                'sales.id',
+                'sales.invoice_no',
+                'sales.invoice_date',
+                'sales.total_amount as amount',
+                'sales.payment_status',
+                'customers.name as party_name',
+                'customers.mobile as party_mobile',
+                'sales.created_at',
+            ])
+            ->leftJoin('customers', 'customers.id', '=', 'sales.customer_id')
+            ->latest('sales.created_at')
+            ->limit(10);
+
+        $purchases = Purchase::query()
+            ->select([
+                DB::raw("'Purchase' as type"),
+                'purchases.id',
+                'purchases.invoice_no',
+                'purchases.invoice_date',
+                'purchases.total_amount as amount',
+                'purchases.payment_status',
+                'suppliers.name as party_name',
+                'suppliers.mobile as party_mobile',
+                'purchases.created_at',
+            ])
+            ->leftJoin('suppliers', 'suppliers.id', '=', 'purchases.supplier_id')
+            ->latest('purchases.created_at')
+            ->limit(10);
+
+        $transactions = DB::query()
+            ->fromSub(
+                $sales->unionAll($purchases),
+                'transactions'
+            )
+            ->orderByDesc('created_at')
+            ->limit(10)
+            ->get();
+
+
+        return view('panel.dashboard', compact('stats', 'graph', 'lowStockProducts', 'transactions'));
     }
 
     public function logout()
