@@ -45,6 +45,7 @@ Route::prefix('panel')->group(function(){
 
         // Purchase
         Route::resource('purchases', PurchaseController::class);
+        Route::get('purchases.invoice/{id}', [PurchaseController::class, 'invoice'])->name('purchases.invoice');
         Route::resource('purchase-returns', PurchaseReturnController::class);
 
         // Sale

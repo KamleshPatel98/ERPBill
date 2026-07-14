@@ -294,4 +294,18 @@ class PurchaseController extends Controller
         $purchase->delete();
         return back()->with('success', 'Purchase deleted successfully');
     }
+
+    public function invoice($id)
+    {
+        $purchase = Purchase::with([
+            'supplier:id,name,mobile',
+            'paymentMode:id,name',
+            'financialYear:id,name',
+            'purchaseItems',
+            'purchaseItems.product:id,name',
+            'purchaseItems.gst:id,name'
+        ])
+        ->findOrFail($id);
+        return view('panel.pdfs.purchase-invoice', compact('purchase'));
+    }
 }
