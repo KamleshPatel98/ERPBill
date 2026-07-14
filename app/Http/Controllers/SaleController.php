@@ -311,4 +311,18 @@ class SaleController extends Controller
         $sale->delete();
         return back()->with('success', 'Sale deleted successfully');
     }
+
+    public function invoice($id)
+    {
+        $sale = Sale::with([
+            'customer:id,name,mobile',
+            'paymentMode:id,name',
+            'financialYear:id,name',
+            'saleItems',
+            'saleItems.product:id,name',
+            'saleItems.gst:id,name'
+        ])
+        ->findOrFail($id);
+        return view('panel.pdfs.sale-invoice', compact('sale'));
+    }
 }

@@ -165,15 +165,23 @@
 
                                 <div class="d-flex justify-content-center gap-1">
 
+                                    <a href="{{ route('sales.invoice', $row->id) }}"
+                                        class="btn btn-sm btn-outline-secondary"
+                                        title="Print Invoice">
+                                        <i class="fa-solid fa-print"></i>
+                                    </a>
+
                                     <button class="btn btn-sm btn-outline-primary"
                                             type="button"
+                                            title="View"
                                             data-bs-toggle="collapse"
                                             data-bs-target="#collapse{{ $row->id }}">
                                         <i class="fa fa-eye"></i>
                                     </button>
 
                                     <a href="{{ route('sales.edit',$row) }}"
-                                       class="btn btn-sm btn-outline-success">
+                                       class="btn btn-sm btn-outline-success"
+                                       title="Edit">
                                         <i class="fa fa-edit"></i>
                                     </a>
 
@@ -186,7 +194,8 @@
 
                                         <button type="submit"
                                                 class="btn btn-sm btn-outline-danger"
-                                                onclick="return confirm('Delete this dsale?')">
+                                                onclick="return confirm('Delete this dsale?')"
+                                                title="Delete">
                                             <i class="fa fa-trash"></i>
                                         </button>
 

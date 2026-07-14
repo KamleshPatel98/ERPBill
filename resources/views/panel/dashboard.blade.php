@@ -211,7 +211,7 @@
                 </div>
             </div>
 
-            <div class="card table-card mt-4">
+            <div class="card table-card mt-3">
                 <div class="card-header d-flex justify-content-between align-items-center">
                     <h6 class="mb-0 fw-bold">Recent Transactions</h6>
                     <div>

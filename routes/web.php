@@ -49,6 +49,7 @@ Route::prefix('panel')->group(function(){
 
         // Sale
         Route::resource('sales', SaleController::class);
+        Route::get('sales.invoice/{id}', [SaleController::class, 'invoice'])->name('sales.invoice');
         Route::resource('sale-returns', SaleReturnController::class);
 
         // Setting
