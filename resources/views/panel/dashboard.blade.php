@@ -9,74 +9,178 @@
     <!-- TOP STATS -->
     <div class="row g-3 mb-3">
 
-        <!-- CARD 1 -->
+        {{-- CARD 1 : Total Sale --}}
         <div class="col-md-3">
-            <div class="card page-card">
-                <div class="card-body d-flex align-items-center">
-
-                    <div class="member-avatar me-3">
-                        <i class="fa-solid fa-box"></i>
+            <div class="card page-card h-100">
+                <div class="card-body">
+                    <div class="d-flex align-items-center mb-3">
+                        <div class="member-avatar me-3">
+                            <i class="fa-solid fa-cart-shopping"></i>
+                        </div>
+                        <div>
+                            <div class="fw-bold">₹{{ number_format($stats['totalSaleAmt'], 2) }}</div>
+                            <small class="text-muted">Total Sale</small>
+                        </div>
                     </div>
-
-                    <div>
-                        <div class="fw-bold">120</div>
-                        <small class="text-muted">Total Products</small>
+                    <div class="text-end">
+                        <a href="{{ route('sales.index') }}" class="text-primary text-decoration-none small fw-semibold">
+                            View Details <i class="fa-solid fa-arrow-right ms-1"></i>
+                        </a>
                     </div>
-
                 </div>
             </div>
         </div>
 
-        <!-- CARD 2 -->
+        {{-- CARD 2 : Total Purchase --}}
         <div class="col-md-3">
-            <div class="card page-card">
-                <div class="card-body d-flex align-items-center">
-
-                    <div class="member-avatar me-3">
-                        <i class="fa-solid fa-triangle-exclamation"></i>
+            <div class="card page-card h-100">
+                <div class="card-body">
+                    <div class="d-flex align-items-center mb-3">
+                        <div class="member-avatar me-3">
+                            <i class="fa-solid fa-cart-plus"></i>
+                        </div>
+                        <div>
+                            <div class="fw-bold">₹{{ number_format($stats['totalPurchaseAmt'], 2) }}</div>
+                            <small class="text-muted">Total Purchase</small>
+                        </div>
                     </div>
-
-                    <div>
-                        <div class="fw-bold text-warning">15</div>
-                        <small class="text-muted">Low Stock</small>
+                    <div class="text-end">
+                        <a href="{{ route('purchases.index') }}" class="text-primary text-decoration-none small fw-semibold">
+                            View Details <i class="fa-solid fa-arrow-right ms-1"></i>
+                        </a>
                     </div>
-
                 </div>
             </div>
         </div>
 
-        <!-- CARD 3 -->
+        {{-- CARD 3 : Net Profit --}}
         <div class="col-md-3">
-            <div class="card page-card">
-                <div class="card-body d-flex align-items-center">
-
-                    <div class="member-avatar me-3">
-                        <i class="fa-solid fa-indian-rupee-sign"></i>
+            <div class="card page-card h-100">
+                <div class="card-body">
+                    <div class="d-flex align-items-center mb-3">
+                        <div class="member-avatar me-3">
+                            <i class="fa-solid fa-chart-line"></i>
+                        </div>
+                        <div>
+                            <div class="fw-bold">₹{{ number_format($stats['netProfit'], 2) }}</div>
+                            <small class="text-muted">Net Profit</small>
+                        </div>
                     </div>
-
-                    <div>
-                        <div class="fw-bold">₹2,45,000</div>
-                        <small class="text-muted">Today Sales</small>
+                    <div class="text-end">
+                        <a href="#" class="text-primary text-decoration-none small fw-semibold">
+                            View Details <i class="fa-solid fa-arrow-right ms-1"></i>
+                        </a>
                     </div>
-
                 </div>
             </div>
         </div>
 
-        <!-- CARD 4 -->
+        {{-- CARD 4 : Low Stock --}}
         <div class="col-md-3">
-            <div class="card page-card">
-                <div class="card-body d-flex align-items-center">
-
-                    <div class="member-avatar me-3">
-                        <i class="fa-solid fa-users"></i>
+            <div class="card page-card h-100">
+                <div class="card-body">
+                    <div class="d-flex align-items-center mb-3">
+                        <div class="member-avatar me-3">
+                            <i class="fa-solid fa-triangle-exclamation"></i>
+                        </div>
+                        <div>
+                            <div class="fw-bold">{{ $stats['lowStock'] }}</div>
+                            <small class="text-muted">Low Stock</small>
+                        </div>
                     </div>
-
-                    <div>
-                        <div class="fw-bold">85</div>
-                        <small class="text-muted">Customers</small>
+                    <div class="text-end">
+                        <a href="{{ route('products.index') }}" class="text-primary text-decoration-none small fw-semibold">
+                            View Details <i class="fa-solid fa-arrow-right ms-1"></i>
+                        </a>
                     </div>
+                </div>
+            </div>
+        </div>
 
+        {{-- CARD 5 : Customer Due --}}
+        <div class="col-md-3">
+            <div class="card page-card h-100">
+                <div class="card-body">
+                    <div class="d-flex align-items-center mb-3">
+                        <div class="member-avatar me-3">
+                            <i class="fa-solid fa-user-clock"></i>
+                        </div>
+                        <div>
+                            <div class="fw-bold">₹{{ number_format($stats['customerDue'], 2) }}</div>
+                            <small class="text-muted">Customer Due</small>
+                        </div>
+                    </div>
+                    <div class="text-end">
+                        <a href="{{ route('sales.index') }}" class="text-primary text-decoration-none small fw-semibold">
+                            View Details <i class="fa-solid fa-arrow-right ms-1"></i>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        {{-- CARD 6 : Supplier Due --}}
+        <div class="col-md-3">
+            <div class="card page-card h-100">
+                <div class="card-body">
+                    <div class="d-flex align-items-center mb-3">
+                        <div class="member-avatar me-3">
+                            <i class="fa-solid fa-truck"></i>
+                        </div>
+                        <div>
+                            <div class="fw-bold">₹{{ number_format($stats['purchaseDue'], 2) }}</div>
+                            <small class="text-muted">Supplier Due</small>
+                        </div>
+                    </div>
+                    <div class="text-end">
+                        <a href="{{ route('purchases.index') }}" class="text-primary text-decoration-none small fw-semibold">
+                            View Details <i class="fa-solid fa-arrow-right ms-1"></i>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        {{-- CARD 7 : Sale Return --}}
+        <div class="col-md-3">
+            <div class="card page-card h-100">
+                <div class="card-body">
+                    <div class="d-flex align-items-center mb-3">
+                        <div class="member-avatar me-3">
+                            <i class="fa-solid fa-rotate-left"></i>
+                        </div>
+                        <div>
+                            <div class="fw-bold">₹{{ number_format($stats['saleReturn'], 2) }}</div>
+                            <small class="text-muted">Sale Return</small>
+                        </div>
+                    </div>
+                    <div class="text-end">
+                        <a href="{{ route('sale-returns.index') }}" class="text-primary text-decoration-none small fw-semibold">
+                            View Details <i class="fa-solid fa-arrow-right ms-1"></i>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        {{-- CARD 8 : Purchase Return --}}
+        <div class="col-md-3">
+            <div class="card page-card h-100">
+                <div class="card-body">
+                    <div class="d-flex align-items-center mb-3">
+                        <div class="member-avatar me-3">
+                            <i class="fa-solid fa-rotate-right"></i>
+                        </div>
+                        <div>
+                            <div class="fw-bold">₹{{ number_format($stats['purchaseReturn'], 2) }}</div>
+                            <small class="text-muted">Purchase Return</small>
+                        </div>
+                    </div>
+                    <div class="text-end">
+                        <a href="{{ route('purchase-returns.index') }}" class="text-primary text-decoration-none small fw-semibold">
+                            View Details <i class="fa-solid fa-arrow-right ms-1"></i>
+                        </a>
+                    </div>
                 </div>
             </div>
         </div>
