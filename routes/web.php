@@ -51,6 +51,7 @@ Route::prefix('panel')->group(function(){
         Route::resource('sales', SaleController::class);
         Route::get('sales.invoice/{id}', [SaleController::class, 'invoice'])->name('sales.invoice');
         Route::resource('sale-returns', SaleReturnController::class);
+        Route::get('sale-returns.invoice/{id}', [SaleReturnController::class, 'invoice'])->name('sale-returns.invoice');
 
         // Setting
         Route::get('web-data', [SettingController::class, 'webData'])->name('settings.web.data');

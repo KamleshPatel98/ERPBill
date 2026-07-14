@@ -17,7 +17,7 @@ class SaleReturnController extends Controller
     /**
      * Display a listing of the resource.
      */
-        public function index(Request $request)
+    public function index(Request $request)
     {
         $records = SaleReturn::with([
             'customer:id,name,mobile',
@@ -310,5 +310,19 @@ class SaleReturnController extends Controller
     {
         $saleReturn->delete();
         return back()->with('success', 'SaleReturn deleted successfully');
+    }
+
+    public function invoice($id)
+    {
+        $saleReturn = SaleReturn::with([
+            'customer:id,name,mobile',
+            'paymentMode:id,name',
+            'financialYear:id,name',
+            'saleReturnItems',
+            'saleReturnItems.product:id,name',
+            'saleReturnItems.gst:id,name'
+        ])
+        ->findOrFail($id);
+        return view('panel.pdfs.sale-return-invoice', compact('saleReturn'));
     }
 }
