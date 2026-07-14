@@ -165,6 +165,13 @@
 
                                 <div class="d-flex justify-content-center gap-1">
 
+                                    <a href="{{ route('purchase-returns.invoice', $row->id) }}"
+                                        class="btn btn-sm btn-outline-secondary"
+                                        title="Print Invoice">
+                                        <i class="fa-solid fa-print"></i>
+                                    </a>
+
+
                                     <button class="btn btn-sm btn-outline-primary"
                                             type="button"
                                             data-bs-toggle="collapse"

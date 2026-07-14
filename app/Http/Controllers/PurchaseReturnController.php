@@ -294,4 +294,18 @@ class PurchaseReturnController extends Controller
         $purchaseReturn->delete();
         return back()->with('success', 'Purchase Return deleted successfully');
     }
+
+    public function invoice($id)
+    {
+        $purchaseReturn = PurchaseReturn::with([
+            'supplier:id,name,mobile',
+            'paymentMode:id,name',
+            'financialYear:id,name',
+            'purchaseReturnItems',
+            'purchaseReturnItems.product:id,name',
+            'purchaseReturnItems.gst:id,name'
+        ])
+        ->findOrFail($id);
+        return view('panel.pdfs.purchase-return-invoice', compact('purchaseReturn'));
+    }
 }
