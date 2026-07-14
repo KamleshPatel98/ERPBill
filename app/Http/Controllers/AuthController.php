@@ -11,6 +11,8 @@ use App\Models\SaleReturn;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Cache;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Pagination\LengthAwarePaginator;
 
 class AuthController extends Controller
 {
@@ -46,23 +48,42 @@ class AuthController extends Controller
         $purchase = Purchase::sum('total_amount');
         $purchaseDue = Purchase::sum('paid_amount');
 
-        $products = Product::query()
+        $products = Product::select('id','name','category_id','opening_stock')
+            ->with('category:id,name')
             ->withSum('purchaseItems as purchase_qty', 'quantity')
             ->withSum('saleItems as sale_qty', 'quantity')
             ->withSum('purchaseReturnItems as purchase_return_qty', 'quantity')
             ->withSum('saleReturnItems as sale_return_qty', 'quantity')
             ->get();
-        $lowStockProducts = $products->filter(function ($product) {
-            $stock = ($product->opening_stock ?? 0)
-                + ($product->purchase_qty ?? 0)
-                + ($product->sale_return_qty ?? 0)
-                - ($product->sale_qty ?? 0)
-                - ($product->purchase_return_qty ?? 0);
-            $product->current_stock = $stock;
-            return $stock < 500;
-        });
 
+        $perPage = 5;
+        $page = request()->get('page', 1);
+
+        $lowStockProducts = $products
+            ->map(function ($product) {
+                $product->current_stock = ($product->opening_stock ?? 0)
+                    + ($product->purchase_qty ?? 0)
+                    + ($product->sale_return_qty ?? 0)
+                    - ($product->sale_qty ?? 0)
+                    - ($product->purchase_return_qty ?? 0);
+
+                return $product;
+            })
+            ->where('current_stock', '<', 500)
+            ->sortBy('current_stock')
+            ->values();
         $lowStockCount = $lowStockProducts->count();
+
+        $lowStockProducts = new LengthAwarePaginator(
+            $lowStockProducts->forPage($page, $perPage),
+            $lowStockProducts->count(),
+            $perPage,
+            $page,
+            [
+                'path' => request()->url(),
+                'query' => request()->query(),
+            ]
+        );
 
         $stats = [
             'totalSaleAmt' => $sale,
@@ -75,7 +96,40 @@ class AuthController extends Controller
             'saleReturn' => SaleReturn::sum('refund_amount'),
             'purchaseReturn' => PurchaseReturn::sum('refund_amount')
         ];
-        return view('panel.dashboard', compact('stats'));
+
+        $salesChart = Sale::select(
+            DB::raw('MONTH(invoice_date) as month'),
+            DB::raw('SUM(total_amount) as total')
+        )
+        ->whereYear('invoice_date', date('Y'))
+        ->groupBy(DB::raw('MONTH(invoice_date)'))
+        ->pluck('total', 'month')
+        ->toArray();
+
+        $purchaseChart = Purchase::select(
+                DB::raw('MONTH(invoice_date) as month'),
+                DB::raw('SUM(total_amount) as total')
+            )
+            ->whereYear('invoice_date', date('Y'))
+            ->groupBy(DB::raw('MONTH(invoice_date)'))
+            ->pluck('total', 'month')
+            ->toArray();
+
+        $months = [];
+        $salesData = [];
+        $purchaseData = [];
+        for ($i = 1; $i <= 12; $i++) {
+            $months[] = date('M', mktime(0, 0, 0, $i, 1));
+            $salesData[] = $salesChart[$i] ?? 0;
+            $purchaseData[] = $purchaseChart[$i] ?? 0;
+        }
+        $graph = [
+            'months' => $months,
+            'sales' => $salesData,
+            'purchases' => $purchaseData,
+        ];
+
+        return view('panel.dashboard', compact('stats', 'graph', 'lowStockProducts'));
     }
 
     public function logout()

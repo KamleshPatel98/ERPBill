@@ -62,8 +62,17 @@
                             <i class="fa-solid fa-chart-line"></i>
                         </div>
                         <div>
-                            <div class="fw-bold">₹{{ number_format($stats['netProfit'], 2) }}</div>
-                            <small class="text-muted">Net Profit</small>
+                            @php
+                                $isProfit = $stats['netProfit'] >= 0;
+                            @endphp
+
+                            <div class="fw-bold {{ $isProfit ? 'text-success' : 'text-danger' }}">
+                                ₹{{ number_format(abs($stats['netProfit']), 2) }}
+                            </div>
+
+                            <small class="text-muted">
+                                {{ $isProfit ? 'Net Profit' : 'Net Loss' }}
+                            </small>
                         </div>
                     </div>
                     <div class="text-end">
@@ -190,83 +199,66 @@
     <!-- MAIN SECTION -->
     <div class="row g-3">
 
-        <!-- RECENT PRODUCTS -->
         <div class="col-md-8">
-
             <div class="card table-card">
-
-                <div class="card-body p-0">
-
-                    <div class="p-3 border-bottom">
-                        <h6 class="mb-0 fw-bold">Recent Products</h6>
-                    </div>
-
-                    <table class="table table-hover align-middle mb-0">
-
-                        <thead>
-                            <tr>
-                                <th>Product</th>
-                                <th>Category</th>
-                                <th>Stock</th>
-                                <th>MRP</th>
-                            </tr>
-                        </thead>
-
-                        <tbody>
-
-                            <tr>
-                                <td>Urea Fertilizer</td>
-                                <td>Fertilizer</td>
-                                <td>120</td>
-                                <td>₹266</td>
-                            </tr>
-
-                            <tr>
-                                <td>Chlorpyrifos</td>
-                                <td>Pesticide</td>
-                                <td>48</td>
-                                <td>₹650</td>
-                            </tr>
-
-                        </tbody>
-
-                    </table>
-
+                <div class="card-header d-flex justify-content-between">
+                    <h6 class="mb-0 fw-bold">Monthly Sales vs Purchase</h6>
+                    <span>{{ date('Y') }}</span>
                 </div>
 
+                <div class="card-body">
+                    <canvas id="salesPurchaseChart" height="110"></canvas>
+                </div>
             </div>
-
         </div>
 
         <!-- QUICK ACTIONS -->
         <div class="col-md-4">
 
-            <div class="card page-card">
-
-                <div class="card-body">
-
-                    <h6 class="fw-bold mb-3">Quick Actions</h6>
-
-                    <a href="#" class="btn btn-primary w-100 mb-2">
-                        <i class="fa fa-plus me-1"></i> Add Product
-                    </a>
-
-                    <a href="#" class="btn btn-outline-success w-100 mb-2">
-                        <i class="fa fa-list me-1"></i> View Products
-                    </a>
-
-                    <a href="#" class="btn btn-outline-primary w-100 mb-2">
-                        <i class="fa fa-layer-group me-1"></i> Categories
-                    </a>
-
-                    <a href="#" class="btn btn-outline-danger w-100">
-                        <i class="fa fa-cart-shopping me-1"></i> Purchase Entry
-                    </a>
-
+            <div class="card table-card">
+                <div class="card-header d-flex justify-content-between align-items-center">
+                    <h6 class="mb-0 fw-bold">Low Stock Products</h6>
                 </div>
 
-            </div>
+                <div class="card-body p-0">
+                    <table class="table table-hover mb-0 align-middle">
+                        <thead>
+                            <tr>
+                                <th>Product</th>
+                                <th class="text-end">Current Stock</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @forelse($lowStockProducts as $product)
+                                <tr>
+                                    <td>
+                                        <div class="fw-semibold text-dark">
+                                            {{ $product->name }}
+                                        </div>
 
+                                        <small class="text-muted">
+                                            <i class="fa-solid fa-layer-group me-1"></i>
+                                            {{ $product->category?->name }}
+                                        </small>
+                                    </td>
+                                    <td class="text-end">
+                                        <span class="badge {{ $product->current_stock <= 0 ? 'bg-danger' : 'bg-warning text-dark' }}">
+                                            {{ $product->current_stock <= 0 ? 'Out of Stock' : $product->current_stock . ' Left' }}
+                                        </span>
+                                    </td>
+                                </tr>
+                            @empty
+                                <tr>
+                                    <td colspan="2" class="text-center text-muted py-3">
+                                        No low stock products found.
+                                    </td>
+                                </tr>
+                            @endforelse 
+                        </tbody>
+                    </table>
+                    {{ $lowStockProducts->links('pagination::bootstrap-5') }}
+                </div>
+            </div>
         </div>
 
     </div>
@@ -274,3 +266,33 @@
 </div>
 
 @endsection
+
+@push('script')
+    <script src="{{ asset('assets/chart.js') }}"></script>
+    <script>
+        const graph = @json($graph);
+
+        new Chart(document.getElementById('salesPurchaseChart'), {
+            type: 'bar',
+            data: {
+                labels: graph.months,
+                datasets: [
+                    {
+                        label: 'Sales',
+                        data: graph.sales,
+                        backgroundColor: '#36A2EB'
+                    },
+                    {
+                        label: 'Purchase',
+                        data: graph.purchases,
+                        backgroundColor: '#FF9F40'
+                    }
+                ]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false
+            }
+        });
+    </script>
+@endpush
