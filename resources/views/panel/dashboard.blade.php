@@ -76,7 +76,7 @@
                         </div>
                     </div>
                     <div class="text-end">
-                        <a href="#" class="text-primary text-decoration-none small fw-semibold">
+                        <a href="{{ $isProfit ? route('sales.index') : route('purchases.index') }}" class="text-primary text-decoration-none small fw-semibold">
                             View Details <i class="fa-solid fa-arrow-right ms-1"></i>
                         </a>
                     </div>
