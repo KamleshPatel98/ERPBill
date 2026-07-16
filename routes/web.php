@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\LedgerController;
 use App\Http\Controllers\Masters\CategoryController;
 use App\Http\Controllers\Masters\CustomerController;
 use App\Http\Controllers\Masters\FinancialYearController;
@@ -54,6 +55,9 @@ Route::prefix('panel')->group(function(){
         Route::get('sales.invoice/{id}', [SaleController::class, 'invoice'])->name('sales.invoice');
         Route::resource('sale-returns', SaleReturnController::class);
         Route::get('sale-returns.invoice/{id}', [SaleReturnController::class, 'invoice'])->name('sale-returns.invoice');
+
+        // Ledger
+        Route::get('customer-ledger', [LedgerController::class, 'customer'])->name('ledgers.customer');
 
         // Setting
         Route::get('web-data', [SettingController::class, 'webData'])->name('settings.web.data');

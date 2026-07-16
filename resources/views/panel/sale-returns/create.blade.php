@@ -97,7 +97,7 @@
 
                             @foreach($customers as $customer)
                                 <option value="{{ $customer->id }}"
-                                    @selected(old('customer_id', $sale->customer_id ?? '') == $customer->id)>
+                                    @selected(old('customer_id', $saleReturn->customer_id ?? '') == $customer->id)>
                                     {{ $customer->name }} ({{ $customer->mobile }})
                                 </option>
                             @endforeach
