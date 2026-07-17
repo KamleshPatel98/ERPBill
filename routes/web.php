@@ -16,6 +16,7 @@ use App\Http\Controllers\PurchaseReturnController;
 use App\Http\Controllers\SaleController;
 use App\Http\Controllers\SaleReturnController;
 use App\Http\Controllers\SettingController;
+use App\Http\Controllers\StockController;
 use App\Models\Product;
 use Illuminate\Support\Facades\Route;
 
@@ -61,6 +62,10 @@ Route::prefix('panel')->group(function(){
         Route::get('customer-ledger-print', [LedgerController::class, 'customerPrint'])->name('ledgers.customerPrint');
         Route::get('supplier-ledger', [LedgerController::class, 'supplier'])->name('ledgers.supplier');
         Route::get('supplier-ledger-print', [LedgerController::class, 'supplierPrint'])->name('ledgers.supplierPrint');
+
+        // Stock
+        Route::get('current-stock', [StockController::class, 'currentStock'])->name('stocks.current');
+        Route::get('low-stock', [StockController::class, 'lowStock'])->name('stocks.low');
 
         // Setting
         Route::get('web-data', [SettingController::class, 'webData'])->name('settings.web.data');

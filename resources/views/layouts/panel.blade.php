@@ -445,9 +445,8 @@
 
                         <ul class="dropdown-menu">
 
-                            <li><a class="dropdown-item" href="#">Current Stock</a></li>
-                            <li><a class="dropdown-item" href="#">Low Stock</a></li>
-                            <li><a class="dropdown-item" href="#">Expiry Stock</a></li>
+                            <li><a class="dropdown-item" href="{{ route('stocks.current') }}">Current Stock</a></li>
+                            <li><a class="dropdown-item" href="{{ route('stocks.low') }}">Low Stock</a></li>
 
                         </ul>
 
