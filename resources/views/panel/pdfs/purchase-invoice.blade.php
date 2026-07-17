@@ -1,4 +1,5 @@
 @extends('layouts.invoice')
+@section('title','Purchase Invoice')
 
 @section('content')
     <!-- Header -->
