@@ -12,13 +12,26 @@ class LedgerController extends Controller
 {
     public function customer(Request $request)
     {
-        $customers = Customer::select('id','name','mobile')
+        $data = $this->getCustomerLedgerData($request);
+        return view('panel.ledgers.customer', $data);
+    }
+
+    public function customerPrint(Request $request)
+    {
+        $data = $this->getCustomerLedgerData($request);
+
+        return view('panel.ledgers.customerPrint', $data);
+    }
+
+    private function getCustomerLedgerData(Request $request): array
+    {
+        $customers = Customer::select('id', 'name', 'mobile')
             ->where('is_active', 1)
             ->get();
 
         $customerId = $request->customer_id;
-        $startDate = $request->start_date ? date('Y-m-d', strtotime($request->start_date)) : '';
-        $endDate = $request->end_date ? date('Y-m-d', strtotime($request->end_date)) : '';
+        $startDate = $request->start_date ? date('Y-m-d', strtotime($request->start_date)) : null;
+        $endDate = $request->end_date ? date('Y-m-d', strtotime($request->end_date)) : null;
 
         // Sale Summary
         $saleSummary = Sale::where('customer_id', $customerId)
@@ -109,7 +122,14 @@ class LedgerController extends Controller
             ->unionAll($saleReturns)
             ->orderBy('invoice_date')
             ->get();
-
-        return view('panel.ledgers.customer', compact('customers', 'summary', 'openingBalance', 'records'));
+        return [
+            'customers'      => $customers,
+            'customer'       => Customer::find($customerId),
+            'summary'        => $summary,
+            'openingBalance' => $openingBalance,
+            'records'        => $records,
+            'startDate'      => $startDate,
+            'endDate'        => $endDate,
+        ];
     }
 }

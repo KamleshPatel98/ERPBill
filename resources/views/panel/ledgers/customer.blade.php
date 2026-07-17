@@ -26,7 +26,7 @@
 
                         <div class="row g-2">
 
-                            <div class="col-md-4">
+                            <div class="col-md-3">
                                 <select name="customer_id" class="form-select select-dropdown">
                                     <option value="">Select Customer</option>
 
@@ -45,7 +45,7 @@
                                     class="form-control datepicker"
                                     autocomplete="off"
                                     placeholder="From Date"
-                                    value="{{ request('start_date') }}">
+                                    value="{{ request('start_date') ?? date('d-m-Y') }}">
                             </div>
 
                             <div class="col-md-2">
@@ -54,10 +54,10 @@
                                     class="form-control datepicker"
                                     autocomplete="off"
                                     placeholder="To Date"
-                                    value="{{ request('end_date') }}">
+                                    value="{{ request('end_date') ?? date('d-m-Y') }}">
                             </div>
 
-                            <div class="col-md-4">
+                            <div class="col-md-3">
                                 <button class="btn btn-primary">
                                     <i class="fa fa-search me-1"></i>
                                     Search
@@ -69,6 +69,20 @@
                                     Reset
                                 </a>
                             </div>
+
+                            @if(isset(request()->customer_id))
+                            <div class="col-md-2">
+                                <a href="{{ route('ledgers.customerPrint', request()->only([
+                                    'customer_id',
+                                    'start_date',
+                                    'end_date'
+                                ])) }}"
+                                    class="btn btn-secondary">
+                                    <i class="fa-solid fa-print"></i>
+                                    Print
+                                </a>
+                            </div>
+                            @endif
 
                         </div>
 
