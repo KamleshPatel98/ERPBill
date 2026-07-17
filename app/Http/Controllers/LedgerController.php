@@ -3,6 +3,9 @@
 namespace App\Http\Controllers;
 
 use App\Models\Masters\Customer;
+use App\Models\Masters\Supplier;
+use App\Models\Purchase;
+use App\Models\PurchaseReturn;
 use App\Models\Sale;
 use App\Models\SaleReturn;
 use Illuminate\Http\Request;
@@ -19,7 +22,6 @@ class LedgerController extends Controller
     public function customerPrint(Request $request)
     {
         $data = $this->getCustomerLedgerData($request);
-
         return view('panel.ledgers.customerPrint', $data);
     }
 
@@ -125,6 +127,111 @@ class LedgerController extends Controller
         return [
             'customers'      => $customers,
             'customer'       => Customer::find($customerId),
+            'summary'        => $summary,
+            'openingBalance' => $openingBalance,
+            'records'        => $records,
+            'startDate'      => $startDate,
+            'endDate'        => $endDate,
+        ];
+    }
+
+    public function supplier(Request $request)
+    {
+        $data = $this->getSupplierLedgerData($request);
+        return view('panel.ledgers.supplier', $data);
+    }
+
+    public function supplierPrint(Request $request)
+    {
+        $data = $this->getSupplierLedgerData($request);
+        return view('panel.ledgers.supplierPrint', $data);
+    }
+
+    private function getSupplierLedgerData(Request $request): array
+    {
+        $suppliers = Supplier::select('id', 'name', 'mobile')
+            ->where('is_active', 1)
+            ->get();
+
+        $supplierId = $request->supplier_id;
+        $startDate = $request->start_date ? date('Y-m-d', strtotime($request->start_date)) : null;
+        $endDate = $request->end_date ? date('Y-m-d', strtotime($request->end_date)) : null;
+
+        $supplier = Supplier::find($supplierId);
+
+        // Purchase Summary
+        $purchaseSummary = Purchase::where('supplier_id', $supplierId)
+            ->when($startDate && $endDate, fn($q) => $q->whereBetween('invoice_date', [$startDate, $endDate]))
+            ->selectRaw("
+                COALESCE(SUM(total_amount),0) as total_purchase,
+                COALESCE(SUM(paid_amount),0) as total_paid,
+                COALESCE(SUM(due_amount),0) as total_due
+            ")
+            ->first();
+
+        // Purchase Return Summary
+        $returnSummary = PurchaseReturn::where('supplier_id', $supplierId)
+            ->when($startDate && $endDate, fn($q) => $q->whereBetween('invoice_date', [$startDate, $endDate]))
+            ->selectRaw("
+                COALESCE(SUM(total_amount),0) as total_return,
+                COALESCE(SUM(refund_amount),0) as total_refund,
+                COALESCE(SUM(due_amount),0) as return_due
+            ")
+            ->first();
+
+        $summary = [
+            'total_purchase' => $purchaseSummary->total_purchase,
+            'total_paid'     => $purchaseSummary->total_paid,
+            'total_due'      => $purchaseSummary->total_due,
+            'total_return'   => $returnSummary->total_return,
+            'total_refund'   => $returnSummary->total_refund,
+            'net_due'        => $purchaseSummary->total_due - $returnSummary->return_due,
+        ];
+
+        $openingPurchase = Purchase::where('supplier_id', $supplierId)
+            ->when($startDate, fn($q) => $q->where('invoice_date', '<', $startDate))
+            ->sum('paid_amount');
+
+        $openingReturn = PurchaseReturn::where('supplier_id', $supplierId)
+            ->when($startDate, fn($q) => $q->where('invoice_date', '<', $startDate))
+            ->sum('refund_amount');
+
+        $openingBalance = $openingPurchase - $openingReturn;
+
+        $purchases = Purchase::where('supplier_id', $supplierId)
+            ->when($startDate && $endDate, fn($q) => $q->whereBetween('invoice_date', [$startDate, $endDate]))
+            ->select(
+                'id',
+                'invoice_date',
+                'invoice_no',
+                DB::raw("'Purchase' as type"),
+                'paid_amount as debit',
+                DB::raw('0 as credit'),
+                'due_amount',
+                'payment_status'
+            );
+
+        $purchaseReturns = PurchaseReturn::where('supplier_id', $supplierId)
+            ->when($startDate && $endDate, fn($q) => $q->whereBetween('invoice_date', [$startDate, $endDate]))
+            ->select(
+                'id',
+                'invoice_date',
+                'invoice_no',
+                DB::raw("'Purchase Return' as type"),
+                DB::raw('0 as debit'),
+                'refund_amount as credit',
+                'due_amount',
+                'payment_status'
+            );
+
+        $records = $purchases
+            ->unionAll($purchaseReturns)
+            ->orderBy('invoice_date')
+            ->get();
+
+        return [
+            'suppliers'      => $suppliers,
+            'supplier'       => $supplier,
             'summary'        => $summary,
             'openingBalance' => $openingBalance,
             'records'        => $records,

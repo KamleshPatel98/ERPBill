@@ -1,6 +1,6 @@
 @extends('layouts.invoice')
 
-@section('title','Customer Ledger Print')
+@section('title','Supplier Ledger Print')
 
 @section('content')
 
@@ -10,7 +10,8 @@
         <x-company-header />
 
         <div class="receipt-info">
-            <h2>Customer Ledger</h2>
+
+            <h2>Supplier Ledger</h2>
 
             <p>
                 <strong>Period :</strong>
@@ -23,19 +24,20 @@
 
     </div>
 
-    <!-- Customer Details -->
+    <!-- Supplier Details -->
+
     <div class="details-grid">
 
         <div class="details-box">
 
-            <h3>Customer Details</h3>
+            <h3>Supplier Details</h3>
 
             <p class="name">
-                {{ $customer->name }}
+                {{ $supplier->name }}
             </p>
 
             <p>
-                {{ $customer->mobile }}
+                {{ $supplier->mobile }}
             </p>
 
         </div>
@@ -79,6 +81,7 @@
         <tbody>
 
             <tr>
+
                 <td colspan="5">
                     <strong>Opening Balance</strong>
                 </td>
@@ -88,6 +91,7 @@
                 </td>
 
                 <td>-</td>
+
             </tr>
 
             @foreach($records as $record)
@@ -137,16 +141,16 @@
         <div class="summary-box">
 
             <div class="summary-row">
-                <span>Total Sale</span>
+                <span>Total Purchase</span>
                 <span>
-                    ₹{{ number_format($summary['total_sale'],2) }}
+                    ₹{{ number_format($summary['total_purchase'],2) }}
                 </span>
             </div>
 
             <div class="summary-row">
-                <span>Total Received</span>
+                <span>Total Paid</span>
                 <span>
-                    ₹{{ number_format($summary['total_received'],2) }}
+                    ₹{{ number_format($summary['total_paid'],2) }}
                 </span>
             </div>
 

@@ -59,6 +59,8 @@ Route::prefix('panel')->group(function(){
         // Ledger
         Route::get('customer-ledger', [LedgerController::class, 'customer'])->name('ledgers.customer');
         Route::get('customer-ledger-print', [LedgerController::class, 'customerPrint'])->name('ledgers.customerPrint');
+        Route::get('supplier-ledger', [LedgerController::class, 'supplier'])->name('ledgers.supplier');
+        Route::get('supplier-ledger-print', [LedgerController::class, 'supplierPrint'])->name('ledgers.supplierPrint');
 
         // Setting
         Route::get('web-data', [SettingController::class, 'webData'])->name('settings.web.data');
