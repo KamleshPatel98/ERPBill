@@ -467,8 +467,7 @@
                         <ul class="dropdown-menu">
 
                             <li><a class="dropdown-item" href="{{ route('reports.sale') }}">Sale Report</a></li>
-                            <li><a class="dropdown-item" href="#">Purchase Report</a></li>
-                            <li><a class="dropdown-item" href="#">Stock Report</a></li>
+                            <li><a class="dropdown-item" href="{{ route('reports.purchase') }}">Purchase Report</a></li>
 
                         </ul>
 

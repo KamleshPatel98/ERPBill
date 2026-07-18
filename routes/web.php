@@ -66,6 +66,8 @@ Route::prefix('panel')->group(function(){
         // Report
         Route::get('sale-report', [ReportController::class, 'sale'])->name('reports.sale');
         Route::get('sale-report-print', [ReportController::class, 'salePrint'])->name('reports.salePrint');
+        Route::get('purchase-report', [ReportController::class, 'purchase'])->name('reports.purchase');
+        Route::get('purchase-report-print', [ReportController::class, 'purchasePrint'])->name('reports.purchasePrint');
 
         // Stock
         Route::get('current-stock', [StockController::class, 'currentStock'])->name('stocks.current');
