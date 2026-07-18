@@ -13,11 +13,11 @@ use App\Http\Controllers\Masters\PaymentModeController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\PurchaseController;
 use App\Http\Controllers\PurchaseReturnController;
+use App\Http\Controllers\ReportController;
 use App\Http\Controllers\SaleController;
 use App\Http\Controllers\SaleReturnController;
 use App\Http\Controllers\SettingController;
 use App\Http\Controllers\StockController;
-use App\Models\Product;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
@@ -62,6 +62,9 @@ Route::prefix('panel')->group(function(){
         Route::get('customer-ledger-print', [LedgerController::class, 'customerPrint'])->name('ledgers.customerPrint');
         Route::get('supplier-ledger', [LedgerController::class, 'supplier'])->name('ledgers.supplier');
         Route::get('supplier-ledger-print', [LedgerController::class, 'supplierPrint'])->name('ledgers.supplierPrint');
+
+        // Report
+        Route::get('sale-report', [ReportController::class, 'sale'])->name('reports.sale');
 
         // Stock
         Route::get('current-stock', [StockController::class, 'currentStock'])->name('stocks.current');
