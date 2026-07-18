@@ -21,7 +21,7 @@
                 </p>
             </div>
 
-            <div class="col-lg-8">
+            <div class="col-lg-7">
                 <form action="{{ url()->current() }}" method="GET">
 
                     <div class="row g-2">
@@ -73,14 +73,19 @@
                 </form>
             </div>
 
-            <div class="col-md-1">
-                <a href="{{ route('sales.create') }}"
-                   class="btn btn-primary">
-                    <i class="fa fa-plus me-1"></i>
-                    Add
+            {{-- @if(isset(request()->customer_id)) --}}
+            <div class="col-md-2">
+                <a href="{{ route('reports.salePrint', request()->only([
+                    'customer_id',
+                    'from_date',
+                    'to_date'
+                ])) }}"
+                    class="btn btn-secondary">
+                    <i class="fa-solid fa-print"></i>
+                    Print
                 </a>
             </div>
-
+            {{-- @endif --}}
         </div>
 
     </div>
