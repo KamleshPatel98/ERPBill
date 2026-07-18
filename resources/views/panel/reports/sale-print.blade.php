@@ -76,7 +76,10 @@
                 <td>{{ $row->invoice_no }}</td>
 
                 @empty(request('customer_id'))
-                <td>{{ $row->customer?->name }}</td>
+                <td>
+                    {{ $row->customer?->name }} <br>
+                    ({{ $row->customer?->mobile ?? '-' }})
+                </td>
                 @endempty
 
                 <td class="text-right">

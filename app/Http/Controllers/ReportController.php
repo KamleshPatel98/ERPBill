@@ -33,7 +33,7 @@ class ReportController extends Controller
 
     private function getSaleReport(Request $request)
     {
-        $query = Sale::with(['customer', 'saleItems.product', 'paymentMode']);
+        $query = Sale::with(['customer:id,name,mobile', 'saleItems.product', 'paymentMode:id,name']);
 
         if ($request->filled('customer_id')) {
             $query->where('customer_id', $request->customer_id);
