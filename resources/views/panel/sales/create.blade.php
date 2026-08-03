@@ -132,12 +132,20 @@
                     </div>
 
                     <div class="col-md-3">
+                        <label class="form-label">Payment Date</label>
+                        <input type="text"
+                               name="date"
+                               class="form-control datepicker"
+                               value="{{ old('date', date('d-m-Y')) }}">
+                    </div>
+
+                    <div class="col-md-3">
                         <label class="form-label">Payment Mode</label>
                         <select name="payment_mode_id" class="form-select">
                             <option value="">Select Mode</option>
 
                             @foreach($paymentModes as $mode)
-                                <option value="{{ $mode->id }}" @selected(old('payment_mode_id', $sale->payment_mode_id ?? '') == $mode->id)>
+                                <option value="{{ $mode->id }}" @selected(old('payment_mode_id') == $mode->id)>
                                     {{ $mode->name }}
                                 </option>
                             @endforeach
@@ -152,6 +160,16 @@
                                id="paid_amount"
                                class="form-control"
                                value="{{ $sale->paid_amount ?? 0}}">
+                    </div>
+
+                    <div class="col-md-3">
+                        <label class="form-label">Pay Amount</label>
+                        <input type="number"
+                               step="0.01"
+                               name="amount"
+                               id="amount"
+                               class="form-control"
+                               value="{{ $sale->due_amount ?? 0}}">
                     </div>
 
                     <div class="col-md-6">

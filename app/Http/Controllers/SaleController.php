@@ -9,6 +9,7 @@ use App\Models\Masters\PaymentMode;
 use App\Models\Product;
 use App\Models\Sale;
 use App\Models\SaleItem;
+use App\Models\SalePayment;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
 
@@ -209,8 +210,10 @@ class SaleController extends Controller
             'customer_id' => 'required|exists:customers,id',
             'financial_year_id' => 'required|exists:financial_years,id',
             'payment_mode_id' => 'nullable|exists:payment_modes,id',
+            'date' => 'nullable|date',
             'paid_amount' => 'required|numeric|between:0,10000000',
             'discount_amount' => 'nullable|numeric|between:0,10000000',
+            'amount' => 'nullable|numeric|between:0,10000000',
             'notes' => 'nullable|string|max:1000',
 
             'items_json' => 'required|json|min:1',
@@ -224,13 +227,13 @@ class SaleController extends Controller
         ]);
 
         try {
+
             $sale->update([
                 'invoice_no' => $request->invoice_no,
                 'invoice_date' => $request->invoice_date,
                 'customer_id' => $request->customer_id,
                 'financial_year_id' => $request->financial_year_id,
                 'payment_mode_id' => $request->payment_mode_id,
-                'paid_amount' => $request->paid_amount,
                 'notes' => $request->notes,
             ]);
 
@@ -273,7 +276,7 @@ class SaleController extends Controller
                 ]);
             }
 
-            $paidAmount = $request->paid_amount ?? 0;
+            $paidAmount = $request->paid_amount + $request->amount;
             $dueAmount = $totalAmount - $paidAmount;
             if ($paidAmount <= 0) {
                 $paymentStatus = 'pending';
@@ -292,6 +295,15 @@ class SaleController extends Controller
                 'due_amount'      => $dueAmount,
                 'payment_status'  => $paymentStatus,
             ]);
+
+            if($request->amount){
+                SalePayment::create([
+                    'sale_id' =>  $sale->id,
+                    'payment_mode_id' => $request->payment_mode_id,
+                    'date' => $request->date,
+                    'amount' => $request->amount,
+                ]);
+            }
 
             return to_route('sales.index')->with('success', 'Sale updated successfully');
         } catch (\Exception $ex) {
