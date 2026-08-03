@@ -159,7 +159,7 @@
                                name="paid_amount"
                                id="paid_amount"
                                class="form-control"
-                               value="{{ $sale->paid_amount ?? 0}}">
+                               value="{{ $sale->paid_amount ?? 0}}" disabled>
                     </div>
 
                     <div class="col-md-3">

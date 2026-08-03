@@ -70,7 +70,9 @@ class SaleController extends Controller
             'invoice_date' => 'required|date',
             'financial_year_id' => 'required|exists:financial_years,id',
             'payment_mode_id' => 'nullable|exists:payment_modes,id',
-            'paid_amount' => 'required|numeric|between:0,10000000',
+            'date' => 'nullable|date',
+            'paid_amount' => 'nullable|numeric|between:0,10000000',
+            'amount' => 'required|numeric|between:0,10000000',
             'discount_amount' => 'nullable|numeric|between:0,10000000',
             'notes' => 'nullable|string|max:1000',
 
@@ -108,7 +110,7 @@ class SaleController extends Controller
                 'customer_id' => $customer_id,
                 'financial_year_id' => $request->financial_year_id,
                 'payment_mode_id' => $request->payment_mode_id,
-                'paid_amount' => $request->paid_amount,
+                'paid_amount' => $request->amount,
                 'notes' => $request->notes,
             ]);
 
@@ -148,7 +150,7 @@ class SaleController extends Controller
                 ]);
             }
 
-            $paidAmount = $request->paid_amount ?? 0;
+            $paidAmount = $request->amount ?? 0;
             $dueAmount = $totalAmount - $paidAmount;
             if ($paidAmount <= 0) {
                 $paymentStatus = 'pending';
@@ -167,6 +169,15 @@ class SaleController extends Controller
                 'due_amount'      => $dueAmount,
                 'payment_status'  => $paymentStatus,
             ]);
+
+            if($request->amount > 0){
+                SalePayment::create([
+                    'sale_id' =>  $sale->id,
+                    'payment_mode_id' => $request->payment_mode_id,
+                    'date' => $request->date,
+                    'amount' => $request->amount,
+                ]);
+            }
 
             return to_route('sales.index')->with('success', 'Sale created successfully');
         } catch (\Exception $ex) {
@@ -213,7 +224,7 @@ class SaleController extends Controller
             'financial_year_id' => 'required|exists:financial_years,id',
             'payment_mode_id' => 'nullable|exists:payment_modes,id',
             'date' => 'nullable|date',
-            'paid_amount' => 'required|numeric|between:0,10000000',
+            'paid_amount' => 'nullable|numeric|between:0,10000000',
             'discount_amount' => 'nullable|numeric|between:0,10000000',
             'amount' => 'nullable|numeric|between:0,10000000',
             'notes' => 'nullable|string|max:1000',
@@ -278,7 +289,7 @@ class SaleController extends Controller
                 ]);
             }
 
-            $paidAmount = $request->paid_amount + $request->amount;
+            $paidAmount = $sale->paid_amount + $request->amount;
             $dueAmount = $totalAmount - $paidAmount;
             if ($paidAmount <= 0) {
                 $paymentStatus = 'pending';
@@ -298,7 +309,7 @@ class SaleController extends Controller
                 'payment_status'  => $paymentStatus,
             ]);
 
-            if($request->amount){
+            if($request->amount > 0){
                 SalePayment::create([
                     'sale_id' =>  $sale->id,
                     'payment_mode_id' => $request->payment_mode_id,
