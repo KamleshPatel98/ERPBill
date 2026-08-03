@@ -26,7 +26,9 @@ class SaleController extends Controller
             'financialYear:id,name',
             'saleItems',
             'saleItems.product:id,name',
-            'saleItems.gst:id,name'
+            'saleItems.gst:id,name',
+            'salePayments',
+            'salePayments.paymentMode:id,name',
         ])
         ->when($request->customer_id !== null, function($q) use ($request){
             $q->where('customer_id', $request->customer_id);

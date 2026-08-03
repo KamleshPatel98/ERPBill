@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Models\Masters\PaymentMode;
 use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Model;
 
@@ -20,5 +21,10 @@ class SalePayment extends Model
                 ? date('Y-m-d', strtotime($value))
                 : null,
         );
+    }
+
+    public function paymentMode()
+    {
+        return $this->belongsTo(PaymentMode::class);
     }
 }
