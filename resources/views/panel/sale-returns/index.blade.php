@@ -103,7 +103,7 @@
                         <th>Date</th>
                         <th>Customer</th>
                         <th>Total</th>
-                        <th>Paid</th>
+                        <th>Refund</th>
                         <th>Due</th>
                         <th>Status</th>
                         <th class="text-center">Action</th>
@@ -134,7 +134,7 @@
                             </td>
 
                             <td>
-                                ₹{{ number_format($row->paid_amount,2) }}
+                                ₹{{ number_format($row->refund_amount,2) }}
                             </td>
 
                             <td>
@@ -316,6 +316,40 @@
                                                 @endif
                                             </table>
                                         </div>
+
+                                        <div class="mt-3">
+                                            <h6 class="mb-2">Sale Return Payment</h6>
+
+                                            <table class="table table-bordered table-sm">
+                                                <thead class="table-light">
+                                                    <tr>
+                                                        <th>#</th>
+                                                        <th>Date</th>
+                                                        <th>Payment Mode</th>
+                                                        <th class="text-end">Amount</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                    @forelse($row->saleReturnPayments as $key => $item)
+                                                        <tr>
+                                                            <td>{{ $key + 1 }}</td>
+                                                            <td>{{ $item->date ?? '-' }}</td>
+                                                            <td>{{ $item->paymentMode?->name ?? '-' }}</td>
+                                                            <td class="text-end">
+                                                                ₹{{ number_format($item->amount, 2) }}
+                                                            </td>
+                                                        </tr>
+                                                    @empty
+                                                        <tr>
+                                                            <td colspan="4" class="text-center">
+                                                                No Sale Return Payment found.
+                                                            </td>
+                                                        </tr>
+                                                    @endforelse
+                                                </tbody>
+                                            </table>
+                                        </div>
+
                                     </div>
 
                                 </div>

@@ -9,6 +9,7 @@ use App\Models\Masters\PaymentMode;
 use App\Models\Product;
 use App\Models\SaleReturnItem;
 use App\Models\SaleReturn;
+use App\Models\SaleReturnPayment;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
 
@@ -25,7 +26,9 @@ class SaleReturnController extends Controller
             'financialYear:id,name',
             'saleReturnItems',
             'saleReturnItems.product:id,name',
-            'saleReturnItems.gst:id,name'
+            'saleReturnItems.gst:id,name',
+            'saleReturnPayments',
+            'saleReturnPayments.paymentMode:id,name',
         ])
         ->when($request->customer_id !== null, function($q) use ($request){
             $q->where('customer_id', $request->customer_id);
@@ -67,7 +70,9 @@ class SaleReturnController extends Controller
             'invoice_date' => 'required|date',
             'financial_year_id' => 'required|exists:financial_years,id',
             'payment_mode_id' => 'nullable|exists:payment_modes,id',
-            'refund_amount' => 'required|numeric|between:0,10000000',
+            'refund_amount' => 'nullable|numeric|between:0,10000000',
+            'date' => 'nullable|date',
+            'amount' => 'nullable|numeric|between:0,10000000',
             'discount_amount' => 'nullable|numeric|between:0,10000000',
             'notes' => 'nullable|string|max:1000',
 
@@ -105,7 +110,7 @@ class SaleReturnController extends Controller
                 'customer_id' => $customer_id,
                 'financial_year_id' => $request->financial_year_id,
                 'payment_mode_id' => $request->payment_mode_id,
-                'refund_amount' => $request->refund_amount,
+                'refund_amount' => $request->amount,
                 'notes' => $request->notes,
             ]);
 
@@ -145,7 +150,7 @@ class SaleReturnController extends Controller
                 ]);
             }
 
-            $paidAmount = $request->refund_amount ?? 0;
+            $paidAmount = $request->amount ?? 0;
             $dueAmount = $totalAmount - $paidAmount;
             if ($paidAmount <= 0) {
                 $paymentStatus = 'pending';
@@ -164,6 +169,15 @@ class SaleReturnController extends Controller
                 'due_amount'      => $dueAmount,
                 'payment_status'  => $paymentStatus,
             ]);
+
+            if($request->amount > 0){
+                SaleReturnPayment::create([
+                    'sale_return_id' =>  $saleReturn->id,
+                    'payment_mode_id' => $request->payment_mode_id,
+                    'date' => $request->date,
+                    'amount' => $request->amount,
+                ]);
+            }
 
             return to_route('sale-returns.index')->with('success', 'SaleReturn created successfully');
         } catch (\Exception $ex) {
@@ -209,7 +223,9 @@ class SaleReturnController extends Controller
             'customer_id' => 'required|exists:customers,id',
             'financial_year_id' => 'required|exists:financial_years,id',
             'payment_mode_id' => 'nullable|exists:payment_modes,id',
-            'refund_amount' => 'required|numeric|between:0,10000000',
+            'refund_amount' => 'nullable|numeric|between:0,10000000',
+            'date' => 'nullable|date',
+            'amount' => 'nullable|numeric|between:0,10000000',
             'discount_amount' => 'nullable|numeric|between:0,10000000',
             'notes' => 'nullable|string|max:1000',
 
@@ -230,7 +246,6 @@ class SaleReturnController extends Controller
                 'customer_id' => $request->customer_id,
                 'financial_year_id' => $request->financial_year_id,
                 'payment_mode_id' => $request->payment_mode_id,
-                'refund_amount' => $request->refund_amount,
                 'notes' => $request->notes,
             ]);
 
@@ -273,7 +288,7 @@ class SaleReturnController extends Controller
                 ]);
             }
 
-            $paidAmount = $request->refund_amount ?? 0;
+            $paidAmount = $saleReturn->refund_amount + $request->amount;
             $dueAmount = $totalAmount - $paidAmount;
             if ($paidAmount <= 0) {
                 $paymentStatus = 'pending';
@@ -292,6 +307,15 @@ class SaleReturnController extends Controller
                 'due_amount'      => $dueAmount,
                 'payment_status'  => $paymentStatus,
             ]);
+
+            if($request->amount > 0){
+                SaleReturnPayment::create([
+                    'sale_return_id' =>  $saleReturn->id,
+                    'payment_mode_id' => $request->payment_mode_id,
+                    'date' => $request->date,
+                    'amount' => $request->amount,
+                ]);
+            }
 
             return to_route('sale-returns.index')->with('success', 'SaleReturn updated successfully');
         } catch (\Exception $ex) {
