@@ -1,59 +1,253 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
+# ERPBill
 
-<p align="center">
-<a href="https://github.com/laravel/framework/actions"><img src="https://github.com/laravel/framework/workflows/tests/badge.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
-</p>
+ERPBill is a web-based ERP and billing management system developed using Laravel, Blade, Bootstrap, JavaScript, jQuery, AJAX, HTML, CSS, and MySQL.
 
-## About Laravel
+The application provides a centralized system for managing products, purchases, sales, returns, stock, ledgers, reports, settings, and other business operations.
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+---
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+## 🚀 Project Overview
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+ERPBill is designed to simplify business and billing operations through a responsive web-based ERP panel.
 
-## Learning Laravel
+The application provides modules for:
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework. You can also check out [Laravel Learn](https://laravel.com/learn), where you will be guided through building a modern Laravel application.
+- Product Management
+- Sales Management
+- Purchase Management
+- Sales Returns
+- Purchase Returns
+- Stock Management
+- Ledger Management
+- Master Management
+- Reports
+- PDF / Invoice Generation
+- Settings
+- Dashboard
+- Authentication
 
-If you don't feel like reading, [Laracasts](https://laracasts.com) can help. Laracasts contains thousands of video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+The system uses Laravel Blade for server-side rendered pages and AJAX/jQuery for dynamic operations without unnecessary page reloads.
 
-## Laravel Sponsors
+---
 
-We would like to extend our thanks to the following sponsors for funding Laravel development. If you are interested in becoming a sponsor, please visit the [Laravel Partners program](https://partners.laravel.com).
+## 🛠️ Technologies Used
 
-### Premium Partners
+### Backend
 
-- **[Vehikl](https://vehikl.com)**
-- **[Tighten Co.](https://tighten.co)**
-- **[Kirschbaum Development Group](https://kirschbaumdevelopment.com)**
-- **[64 Robots](https://64robots.com)**
-- **[Curotec](https://www.curotec.com/services/technologies/laravel)**
-- **[DevSquad](https://devsquad.com/hire-laravel-developers)**
-- **[Redberry](https://redberry.international/laravel-development)**
-- **[Active Logic](https://activelogic.com)**
+- PHP
+- Laravel
+- MySQL
+- Laravel Eloquent ORM
+- Laravel Blade
 
-## Contributing
+### Frontend
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+- HTML5
+- CSS3
+- Bootstrap
+- JavaScript
+- jQuery
+- AJAX
 
-## Code of Conduct
+### Additional Libraries / Tools
 
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
+- SweetAlert2
+- Select2
+- Datepicker
+- Vite
+- Composer
+- NPM
 
-## Security Vulnerabilities
+---
 
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
+## ✨ Main Features
 
-## License
+### 🔐 Authentication
 
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+- User login
+- Authentication layout
+- Session-based authentication
+- Protected ERP panel
+- Validation and security
+
+### 📊 Dashboard
+
+- Business overview
+- Important statistics
+- Quick access to ERP modules
+- Summary information
+- Recent business activities
+
+### 📦 Product Management
+
+- Product management
+- Product information
+- Product pricing
+- Product-related transactions
+- Stock-related information
+
+### 🛒 Purchase Management
+
+- Purchase entry
+- Purchase listing
+- Purchase details
+- Purchase transactions
+- Purchase-related payments
+- Purchase records
+
+### 🔄 Purchase Returns
+
+- Purchase return management
+- Return entry
+- Return details
+- Return transactions
+- Return-related calculations
+
+### 💰 Sales Management
+
+- Sales entry
+- Sales listing
+- Sales details
+- Billing
+- Invoice generation
+- Payment management
+- Sales calculations
+
+### ↩️ Sales Returns
+
+- Sales return management
+- Return entry
+- Return details
+- Return transactions
+- Refund/payment related calculations
+
+### 📦 Stock Management
+
+- Stock management
+- Stock records
+- Stock tracking
+- Product stock information
+- Stock-related reports
+
+### 📒 Ledger Management
+
+- Ledger management
+- Transaction records
+- Debit/Credit information
+- Business transaction tracking
+
+### 📈 Reports
+
+The reporting section provides business-related reports for different ERP modules.
+
+Reports may include:
+
+- Sales Reports
+- Purchase Reports
+- Stock Reports
+- Ledger Reports
+- Return Reports
+- Transaction Reports
+
+### 🏢 Masters
+
+Master data required for ERP operations is managed from the Masters section.
+
+This provides centralized management of common business information used throughout the application.
+
+### ⚙️ Settings
+
+Application and business-related settings are managed through the Settings section.
+
+### 🧾 PDF / Invoice
+
+The application includes dedicated PDF-related views for:
+
+- Invoice generation
+- Invoice printing
+- Business documents
+- PDF output
+
+---
+
+# 📁 Project Structure
+
+```text
+ERPBill/
+│
+├── app/
+│   ├── Console/
+│   ├── Exceptions/
+│   ├── Http/
+│   │   ├── Controllers/
+│   │   ├── Middleware/
+│   │   └── Requests/
+│   ├── Models/
+│   └── Providers/
+│
+├── bootstrap/
+│
+├── config/
+│
+├── database/
+│   ├── factories/
+│   ├── migrations/
+│   └── seeders/
+│
+├── public/
+│
+├── resources/
+│   ├── css/
+│   ├── js/
+│   └── views/
+│       │
+│       ├── components/
+│       │   ├── alert.blade.php
+│       │   ├── company-header.blade.php
+│       │   ├── datepicker.blade.php
+│       │   ├── dropdown.blade.php
+│       │   └── is-active.blade.php
+│       │
+│       ├── layouts/
+│       │   ├── auth.blade.php
+│       │   ├── invoice.blade.php
+│       │   └── panel.blade.php
+│       │
+│       ├── panel/
+│       │   ├── auth/
+│       │   ├── ledgers/
+│       │   ├── masters/
+│       │   ├── pdfs/
+│       │   ├── products/
+│       │   ├── purchase-returns/
+│       │   ├── purchases/
+│       │   ├── reports/
+│       │   ├── sale-returns/
+│       │   ├── sales/
+│       │   ├── settings/
+│       │   └── stocks/
+│       │
+│       ├── dashboard.blade.php
+│       └── welcome.blade.php
+│
+├── routes/
+│   ├── web.php
+│   ├── api.php
+│   └── console.php
+│
+├── storage/
+│
+├── tests/
+│   ├── Feature/
+│   └── Unit/
+│
+├── .env.example
+├── .gitattributes
+├── .gitignore
+├── artisan
+├── composer.json
+├── composer.lock
+├── package.json
+├── phpunit.xml
+├── vite.config.js
+└── README.md
