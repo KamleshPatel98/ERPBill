@@ -5,6 +5,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{{ getSetting('app_name') }} - @yield('title')</title>
+    <link rel="icon" type="image/jpg" href="{{ asset("assets/images/logo.jpg") }}">
+    
     <style>
         body {
             font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
